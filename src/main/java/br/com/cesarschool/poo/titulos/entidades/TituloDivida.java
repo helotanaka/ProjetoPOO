@@ -21,6 +21,10 @@ public class TituloDivida extends Ativo{
         this.taxaJuros = taxaJuros;
     }
 
+    public double getTaxaJuros() {
+        return taxaJuros;
+    }
+
     public double calcularPrecoTransacao(double montante){
         return montante * (1 - taxaJuros/100.0);
     }
