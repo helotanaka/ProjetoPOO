@@ -18,20 +18,20 @@ import java.util.List;
     2;EUA;2026-01-01;1.5
     3;FRANCA;2027-11-11;2.5 
  * 
- * A inclus„o deve adicionar uma nova linha ao arquivo. N„o È permitido incluir 
- * identificador repetido. Neste caso, o mÈtodo deve retornar false. Inclus„o com 
+ * A inclus√£o deve adicionar uma nova linha ao arquivo. N√£o √© permitido incluir 
+ * identificador repetido. Neste caso, o m√©todo deve retornar false. Inclus√£o com 
  * sucesso, retorno true.
  * 
- * A alteraÁ„o deve substituir a linha atual por uma nova linha. A linha deve ser 
- * localizada por identificador que, quando n„o encontrado, enseja retorno false. 
- * AlteraÁ„o com sucesso, retorno true.  
+ * A altera√ß√£o deve substituir a linha atual por uma nova linha. A linha deve ser 
+ * localizada por identificador que, quando n√£o encontrado, enseja retorno false. 
+ * Altera√ß√£o com sucesso, retorno true.  
  *   
- * A exclus„o deve apagar a linha atual do arquivo. A linha deve ser 
- * localizada por identificador que, quando n„o encontrado, enseja retorno false. 
- * Exclus„o com sucesso, retorno true.
+ * A exclus√£o deve apagar a linha atual do arquivo. A linha deve ser 
+ * localizada por identificador que, quando n√£o encontrado, enseja retorno false. 
+ * Exclus√£o com sucesso, retorno true.
  * 
  * A busca deve localizar uma linha por identificador, materializar e retornar um 
- * objeto. Caso o identificador n„o seja encontrado no arquivo, retornar null.   
+ * objeto. Caso o identificador n√£o seja encontrado no arquivo, retornar null.   
  */
 public class RepositorioTituloDivida {
 	public boolean incluir(TituloDivida tituloDivida) {
@@ -43,7 +43,7 @@ public class RepositorioTituloDivida {
 			String frase = tituloDivida.getIdentificador() + ";" + tituloDivida.getNome() + ";" + tituloDivida.getDataDeValidade() +";" + tituloDivida.getTaxaJuros();
 			escritor.write(frase); //Coloca a frase no txt
 			escritor.newLine(); // Adiciona uma nova linha
-			return true; // Inclus„o com sucesso
+			return true; // Inclus√£o com sucesso
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -59,14 +59,14 @@ public class RepositorioTituloDivida {
 			while ((linha = leitor.readLine()) != null) {
 				String[] divisao = linha.split(";");
 
-				// Verifica se o identificador da linha corresponde ao identificador da aÁ„o a ser alterada
+				// Verifica se o identificador da linha corresponde ao identificador da a√ß√£o a ser alterada
 				if (Integer.parseInt(divisao[0]) == tituloDivida.getIdentificador()) {
-					// Monta a nova linha com os dados da aÁ„o fornecida
+					// Monta a nova linha com os dados da a√ß√£o fornecida
 					String novaLinha = tituloDivida.getIdentificador() + ";" + tituloDivida.getNome() + ";" + tituloDivida.getDataDeValidade() +";" + tituloDivida.getTaxaJuros();
 					linhas.add(novaLinha);  // Adiciona a nova linha no lugar da antiga
-					alterado = true;  // Marca que a alteraÁ„o foi feita
+					alterado = true;  // Marca que a altera√ß√£o foi feita
 				} else {
-					linhas.add(linha);  // MantÈm a linha original
+					linhas.add(linha);  // Mant√©m a linha original
 				}
 			}
 		}catch(IOException e) {
@@ -97,11 +97,11 @@ public class RepositorioTituloDivida {
 			while ((linha = leitor.readLine()) != null) {
 				String[] divisao = linha.split(";");
 
-				// Verifica se o identificador da linha corresponde ao identificador da aÁ„o a ser alterada
+				// Verifica se o identificador da linha corresponde ao identificador da a√ß√£o a ser alterada
 				if (Integer.parseInt(divisao[0]) == identificador) {
-					deletado = true;  // Marca que a alteraÁ„o foi feita
+					deletado = true;  // Marca que a altera√ß√£o foi feita
 				} else {
-					linhas.add(linha);  // MantÈm a linha original
+					linhas.add(linha);  // Mant√©m a linha original
 				}
 			}
 		}catch(IOException e) {
@@ -124,7 +124,7 @@ public class RepositorioTituloDivida {
 	}
 
 	public TituloDivida buscar(int identificador) {
-		if(procurarId(identificador) == false){ // se n„o achar id igual
+		if(procurarId(identificador) == false){ // se n√£o achar id igual
 			return null;
 		}
 
@@ -156,7 +156,7 @@ public class RepositorioTituloDivida {
 	}
 
 	private boolean procurarId(int identificador){
-		try (BufferedReader leitor = new BufferedReader(new FileReader("Acao.txt"))) { //lÍ o texto
+		try (BufferedReader leitor = new BufferedReader(new FileReader("Acao.txt"))) { //l√™ o texto
 			String linha;
 			while ((linha = leitor.readLine()) != null) {
 				String[] partes = linha.split(";");
@@ -167,6 +167,6 @@ public class RepositorioTituloDivida {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return false; // Identificador n„o encontrado
+		return false; // Identificador n√£o encontrado
 	}
 }

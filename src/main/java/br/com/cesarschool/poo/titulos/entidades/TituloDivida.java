@@ -3,12 +3,12 @@ package br.com.cesarschool.poo.titulos.entidades;
 import java.time.LocalDate;
 
 /*
- * Esta classe deve herdar de Ativo.
+ * Esta classe deve herdar de Ativo. OK
  * E deve ter os seguintes atributos:
- * taxaJuros, do tipo double.
+ * taxaJuros, do tipo double. OK
  * 
- * Deve ter um construtor p�blico que inicializa os atributos, 
- * e m�todos set/get p�blicos para os atributos.
+ * Deve ter um construtor p�blico que inicializa os atributos, OK
+ * e m�todos set/get p�blicos para os atributos. OK -added by tony
  * 
  * Deve ter um m�todo p�blico double calcularPrecoTransacao(double montante): o pre�o 
  * da transa��o � montante vezes (1 - taxaJuros/100.0).
@@ -23,6 +23,10 @@ public class TituloDivida extends Ativo{
 
     public double getTaxaJuros() {
         return taxaJuros;
+    }
+
+    public void setTaxaJuros(double taxaJuros){
+        this.taxaJuros = taxaJuros;
     }
 
     public double calcularPrecoTransacao(double montante){

@@ -5,10 +5,10 @@ package br.com.cesarschool.poo.titulos.entidades;
  * nome, do tipo String
  * autorizadoAcao, do tipo double
  * saldoAcao, do tipo double
- * saldoTituloDivida, do tipo double
+ * saldoTituloDivida, do tipo double //EVERYTHING OK HERE
  *
  * Deve ter um construtor p�blico que inicializa os atributos identificador, nome
- * e autorizadoAcao.
+ * e autorizadoAcao. //OK
  *
  * Deve ter m�todos set/get p�blicos para os atributos identificador, nome
  * e autorizadoAcao. O atributo identificador � read-only fora da classe.
@@ -20,7 +20,7 @@ package br.com.cesarschool.poo.titulos.entidades;
  *  void creditarSaldoAcao(double valor): deve adicionar valor ao saldoAcao
  *  void debitarSaldoAcao(double valor): deve diminuir valor de saldoAcao
  *  void creditarSaldoTituloDivida(double valor): deve adicionar valor ao saldoTituloDivida
- *  void debitarSaldoTituloDivida(double valor): deve diminuir valor de saldoTituloDivida
+ *  void debitarSaldoTituloDivida(double valor): deve diminuir valor de saldoTituloDivida // EVERYTHING OK
  */
 public class EntidadeOperadora {
     private long identificador;
