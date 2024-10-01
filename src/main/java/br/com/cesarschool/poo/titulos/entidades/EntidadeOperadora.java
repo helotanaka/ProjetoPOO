@@ -25,7 +25,7 @@ package br.com.cesarschool.poo.titulos.entidades;
 public class EntidadeOperadora {
     private long identificador;
     private String nome;
-    private double autorizacaoAcao;
+    private boolean autorizacaoAcao;
     private double saldoAcao;
     private double saldoTituloDivida;
 
