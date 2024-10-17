@@ -1,4 +1,20 @@
 package br.com.cesarschool.poo.titulos.repositorios;
+
+import br.com.cesarschool.poo.titulos.entidades.EntidadeOperadora;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+
+
+
 /*
  * Deve gravar em e ler de um arquivo texto chamado Acao.txt os dados dos objetos do tipo
  * Acao. Seguem abaixo exemplos de linhas.
@@ -7,21 +23,65 @@ package br.com.cesarschool.poo.titulos.repositorios;
     2;BANCO DO BRASIL;2026-01-01;21.21
     3;CORREIOS;2027-11-11;6.12 
  * 
- * A inclus„o deve adicionar uma nova linha ao arquivo. N„o È permitido incluir 
- * identificador repetido. Neste caso, o mÈtodo deve retornar false. Inclus„o com 
+ * A inclus√£o deve adicionar uma nova linha ao arquivo. N√£o √© permitido incluir 
+ * identificador repetido. Neste caso, o m√©todo deve retornar false. Inclus√£o com 
  * sucesso, retorno true.
  * 
- * A alteraÁ„o deve substituir a linha atual por uma nova linha. A linha deve ser 
- * localizada por identificador que, quando n„o encontrado, enseja retorno false. 
- * AlteraÁ„o com sucesso, retorno true.  
+ * A altera√ß√£o deve substituir a linha atual por uma nova linha. A linha deve ser 
+ * localizada por identificador que, quando n√£o encontrado, enseja retorno false. 
+ * Altera√ß√£o com sucesso, retorno true.  
  *   
- * A exclus„o deve apagar a linha atual do arquivo. A linha deve ser 
- * localizada por identificador que, quando n„o encontrado, enseja retorno false. 
- * Exclus„o com sucesso, retorno true.
+ * A exclus√£o deve apagar a linha atual do arquivo. A linha deve ser 
+ * localizada por identificador que, quando n√£o encontrado, enseja retorno false. 
+ * Exclus√£o com sucesso, retorno true.
  * 
  * A busca deve localizar uma linha por identificador, materializar e retornar um 
- * objeto. Caso o identificador n„o seja encontrado no arquivo, retornar null.   
+ * objeto. Caso o identificador n√£o seja encontrado no arquivo, retornar null.
+ *
+ * "ent eu fiz praticamente a mesma coisa da classe acao s√≥ que com a classe EntidadeOperadora"
+ *
  */
+
+
 public class RepositorioEntidadeOperadora {
+
+    public boolean incluir(EntidadeOperadora entidadeoperadora){
+        if (procurarId(entidadeoperadora.getIdentificador())){
+
+            return false;
+
+        }
+
+        try (BufferedWriter escritor = new BufferedWriter(new FileWriter("Acao.txt", true))){ // how would I handle this part?
+            String frase = entidadeoperadora.getIdentificador() + ";" + entidadeoperadora.getNome() + ";" + entidadeoperadora.getDataDeValidade() + entidadeoperadora.getValorUnitario();
+            escritor.write(frase);
+
+        }
+
+
+    }
+
+    /*U
+        If the procurarId function is used in the same way in two different classes and performs the same task,
+        a good practice to avoid code duplication is to implement this method in a shared utility class or as a static
+        method in a parent class if there's a logical inheritance relationship between the classes.
+        Doesn't seem like I can do either of those things, based on what the teacher asked for.
+     */
+
+    private boolean procurarId(long identificador){ // had to change to LONG here instead of INT
+        try (BufferedReader leitor = new BufferedReader(new FileReader("Acao.txt"))) { //l√™ o texto
+            String linha;
+            while ((linha = leitor.readLine()) != null) {
+                String[] partes = linha.split(";");
+                if (Integer.parseInt(partes[0]) == identificador) { //converte string em valor int
+                    return true; // Identificador encontrado
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false; // Identificador n√£o encontrado
+    }
+
 
 }

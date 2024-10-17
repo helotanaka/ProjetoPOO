@@ -7,11 +7,11 @@ import java.time.LocalDate;
  * E deve ter os seguintes atributos:
  * valorUnitario, do tipo double.OK
  * 
- * Deve ter um construtor público que inicializa os atributos,  OK
- * e métodos set/get públicos para os atributos. OK
+ * Deve ter um construtor pÃºblico que inicializa os atributos,  OK
+ * e mÃ©todos set/get pÃºblicos para os atributos. OK
  * 
- * Deve ter um método público double calcularPrecoTransacao(double montante): o preço
- * da transação é o produto do montante pelo valorUnitario. OK
+ * Deve ter um mÃ©todo pÃºblico double calcularPrecoTransacao(double montante): o preÃ§o
+ * da transaÃ§Ã£o Ã© o produto do montante pelo valorUnitario. OK
  */
 public class Acao extends Ativo{
     private double valorUnitario;
