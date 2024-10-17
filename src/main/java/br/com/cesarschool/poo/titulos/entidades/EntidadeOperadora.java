@@ -29,7 +29,7 @@ public class EntidadeOperadora {
     private double saldoAcao;
     private double saldoTituloDivida;
 
-    public EntidadeOperadora(long identificador, String nome, double autorizacaoAcao){
+    public EntidadeOperadora(long identificador, String nome, boolean autorizacaoAcao){
         this.identificador = identificador;
         this.nome = nome;
         this.autorizacaoAcao = autorizacaoAcao;
@@ -51,11 +51,11 @@ public class EntidadeOperadora {
         return nome;
     }
 
-    public void setAutorizacaoAcao(double autorizacaoAcao) {
+    public void setAutorizacaoAcao(boolean autorizacaoAcao) {
         this.autorizacaoAcao = autorizacaoAcao;
     }
 
-    public double getAutorizacaoAcao() {
+    public boolean getAutorizacaoAcao() {
         return autorizacaoAcao;
     }
 
