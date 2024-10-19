@@ -2,20 +2,6 @@ package br.com.cesarschool.poo.titulos.entidades;
 
 import java.time.LocalDateTime;
 
-/*
- * Esta classe deve ter os seguintes atributos:
- * entidadeCredito, do tipo EntidadeOperadora OK
- * entidadeDebito, do tipo EntidadeOperadora OK
- * acao, do tipo Acao OK
- * tituloDivida, do tipo TituloDivida OK
- * valorOperacao, do tipo double OK
- * dataHoraOperacao, do tipo LocalDateTime OK
- *
- * Deve ter um construtor público que inicializa os atributos. OK
- * Deve ter métodos get/set públicos para todos os atributos, que
- * são read-only fora da classe. OK
- *
- */
 public class Transacao {
     private EntidadeOperadora entidadeCredito;
     private EntidadeOperadora entidadeDebito;

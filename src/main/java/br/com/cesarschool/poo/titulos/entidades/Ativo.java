@@ -2,16 +2,6 @@ package br.com.cesarschool.poo.titulos.entidades;
 
 import java.time.LocalDate;
 
-/*
- * Esta classe deve ter os seguintes atributos:
- * identificador, do tipo int OK
- * nome, do tipo String OK
- * data de validade, do tipo LocalDate OK
- * 
- * Deve ter um construtor p�blico que inicializa os atributos, OK
- * e m�todos set/get p�blicos para os atributos. O atributo identificador
- * � read-only fora da classe.OK
- */
 public class Ativo {
     private int identificador;
     private String nome;
@@ -23,11 +13,15 @@ public class Ativo {
         this.dataDeValidade = dataDeValidade;
     }
 
-    public int getIdentificador(){
+    public int getIdentificador() {
         return identificador;
     }
 
-    public String getNome(){
+    private void setIdentificador(int identificador) {
+        this.identificador = identificador;
+    }
+
+    public String getNome() {
         return nome;
     }
 
