@@ -164,4 +164,26 @@ public class RepositorioTransacao {
 		return String.format("%d;%s;%b;%.2f;%.2f", entidade.getIdentificador(), entidade.getNome(),
 				entidade.getAutorizacaoAcao(), entidade.getSaldoAcao(), entidade.getSaldoTituloDivida());
 	}
+
+	public Transacao[] buscarPorEntidadeDevedora(int identificadorEntidadeDebito) {
+		List<Transacao> transacoesEncontradas = new ArrayList<>();
+
+		try (BufferedReader leitor = new BufferedReader(new FileReader("Transacao.txt"))) {
+			String linha;
+			while ((linha = leitor.readLine()) != null) {
+				Transacao transacao = converterStringParaTransacao(linha);
+				if (transacao.getEntidadeDebito().getIdentificador() == identificadorEntidadeDebito) {
+					transacoesEncontradas.add(transacao);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return transacoesEncontradas.toArray(new Transacao[0]);
+	}
+
+
+
+
 }

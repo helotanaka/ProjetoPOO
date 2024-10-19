@@ -51,6 +51,85 @@ package br.com.cesarschool.poo.titulos.mediators;
  * Se este for válido, deve chamar o buscar do repositório, retornando o 
  * que ele retornar. Se o identificador for inválido, retornar null. 
  */
-public class MediatorTituloDivida {
 
+
+import br.com.cesarschool.poo.titulos.entidades.TituloDivida;
+import br.com.cesarschool.poo.titulos.repositorios.RepositorioTituloDivida;
+import java.time.LocalDate;
+
+public class MediatorTituloDivida {
+    private static MediatorTituloDivida instance;
+    private RepositorioTituloDivida repositorioTituloDivida = new RepositorioTituloDivida();
+
+    // Construtor privado para garantir o padrão Singleton
+    private MediatorTituloDivida() {}
+
+    // Método público estático para acessar a instância única
+    public static MediatorTituloDivida getInstance() {
+        if (instance == null) {
+            synchronized (MediatorTituloDivida.class) {
+                if (instance == null) {
+                    instance = new MediatorTituloDivida();
+                }
+            }
+        }
+        return instance;
+    }
+
+    // Método privado para validar os dados de um Título de Dívida
+    private String validar(TituloDivida titulo) {
+        if (titulo.getIdentificador() <= 0 || titulo.getIdentificador() >= 100000) {
+            return "Identificador deve estar entre 1 e 99999.";
+        }
+        if (titulo.getNome() == null || titulo.getNome().trim().isEmpty()) {
+            return "Nome deve ser preenchido.";
+        }
+        if (titulo.getNome().length() < 10 || titulo.getNome().length() > 100) {
+            return "Nome deve ter entre 10 e 100 caracteres.";
+        }
+        if (titulo.getDataDeValidade().isBefore(LocalDate.now().plusDays(180))) {
+            return "Data de validade deve ter pelo menos 180 dias na frente da data atual.";
+        }
+        if (titulo.getTaxaJuros() < 0) {
+            return "Taxa de juros deve ser maior ou igual a zero.";
+        }
+        return null;
+    }
+
+    // Método público para incluir um Título de Dívida no repositório
+    public String incluir(TituloDivida titulo) {
+        String mensagemValidacao = validar(titulo);
+        if (mensagemValidacao != null) {
+            return mensagemValidacao;
+        }
+        boolean incluido = repositorioTituloDivida.incluir(titulo);
+        return incluido ? null : "Título já existente";
+    }
+
+    // Método público para alterar um Título de Dívida no repositório
+    public String alterar(TituloDivida titulo) {
+        String mensagemValidacao = validar(titulo);
+        if (mensagemValidacao != null) {
+            return mensagemValidacao;
+        }
+        boolean alterado = repositorioTituloDivida.alterar(titulo);
+        return alterado ? null : "Título inexistente";
+    }
+
+    // Método público para excluir um Título de Dívida pelo identificador
+    public String excluir(int identificador) {
+        if (identificador <= 0 || identificador >= 100000) {
+            return "Identificador deve estar entre 1 e 99999.";
+        }
+        boolean excluido = repositorioTituloDivida.excluir(identificador);
+        return excluido ? null : "Título inexistente";
+    }
+
+    // Método público para buscar um Título de Dívida pelo identificador
+    public TituloDivida buscar(int identificador) {
+        if (identificador <= 0 || identificador >= 100000) {
+            return null;
+        }
+        return repositorioTituloDivida.buscar(identificador);
+    }
 }
