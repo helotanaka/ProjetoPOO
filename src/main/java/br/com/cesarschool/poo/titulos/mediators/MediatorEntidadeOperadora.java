@@ -52,18 +52,17 @@ package br.com.cesarschool.poo.titulos.mediators;
 
 import br.com.cesarschool.poo.titulos.entidades.EntidadeOperadora;
 import br.com.cesarschool.poo.titulos.repositorios.RepositorioEntidadeOperadora;
-import java.time.LocalDate;
 
-public class MediatorEntdadeOperadora {
+public class MediatorEntidadeOperadora {
 
-    private static MediatorEntdadeOperadora instance;
+    private static MediatorEntidadeOperadora instance;
     private RepositorioEntidadeOperadora repositorioEntidadeOperadora = new RepositorioEntidadeOperadora();
 
-    private MediatorEntdadeOperadora() {}
+    private MediatorEntidadeOperadora() {}
 
-    public static synchronized MediatorEntdadeOperadora getInstance() {
+    public static synchronized MediatorEntidadeOperadora getInstance() {
         if (instance == null) {
-            instance = new MediatorEntdadeOperadora();
+            instance = new MediatorEntidadeOperadora();
         }
         return instance;
     }

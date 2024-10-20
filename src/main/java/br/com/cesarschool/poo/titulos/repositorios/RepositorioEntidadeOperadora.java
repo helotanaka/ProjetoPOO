@@ -5,22 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class RepositorioEntidadeOperadora {
 
+    private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/EntidadeOperadora.txt";
+
     public boolean incluir(EntidadeOperadora entidadeOperadora) {
-        if(procurarId(entidadeOperadora.getIdentificador()) == true){ // se achar id igual
-            return false;
+
+        if (procurarId(entidadeOperadora.getIdentificador())) {
+            return false; // Identificador já existe
         }
 
-        try (BufferedWriter escritor = new BufferedWriter(new FileWriter("EntidadeOperadora.txt", true))) {// escrever no arquivo
-            String frase = entidadeOperadora.getIdentificador() + ";" + entidadeOperadora.getNome() + ";" + entidadeOperadora.getAutorizacaoAcao() +";" + entidadeOperadora.getSaldoAcao() + ";" + entidadeOperadora.getSaldoTituloDivida();
-            escritor.write(frase); //Coloca a frase no txt
-            escritor.newLine(); // Adiciona uma nova linha
-            return true; // Inclusão com sucesso
+        try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO, true))) {
+            String frase = entidadeOperadora.getIdentificador() + ";" + entidadeOperadora.getNome() + ";" +
+                    entidadeOperadora.getAutorizacaoAcao() + ";" + entidadeOperadora.getSaldoAcao() + ";" +
+                    entidadeOperadora.getSaldoTituloDivida();
+            escritor.write(frase);
+            escritor.newLine();
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,30 +34,31 @@ public class RepositorioEntidadeOperadora {
     }
 
     public boolean alterar(EntidadeOperadora entidadeOperadora) {
+
         List<String> linhas = new ArrayList<>();
         boolean alterado = false;
 
-        try (BufferedReader leitor = new BufferedReader(new FileReader("EntidadeOperadora.txt"))){
+        try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
             String linha;
             while ((linha = leitor.readLine()) != null) {
                 String[] divisao = linha.split(";");
 
-                // Verifica se o identificador da linha corresponde ao identificador da ação a ser alterada
-                if (Integer.parseInt(divisao[0]) == entidadeOperadora.getIdentificador()) {
-                    // Monta a nova linha com os dados da ação fornecida
-                    String novaLinha = entidadeOperadora.getIdentificador() + ";" + entidadeOperadora.getNome() + ";" + entidadeOperadora.getAutorizacaoAcao() +";" + entidadeOperadora.getSaldoAcao() + ";" + entidadeOperadora.getSaldoTituloDivida();
-                    linhas.add(novaLinha);  // Adiciona a nova linha no lugar da antiga
-                    alterado = true;  // Marca que a alteração foi feita
+                if (Long.parseLong(divisao[0]) == entidadeOperadora.getIdentificador()) {
+                    String novaLinha = entidadeOperadora.getIdentificador() + ";" + entidadeOperadora.getNome() + ";" +
+                            entidadeOperadora.getAutorizacaoAcao() + ";" + entidadeOperadora.getSaldoAcao() + ";" +
+                            entidadeOperadora.getSaldoTituloDivida();
+                    linhas.add(novaLinha);
+                    alterado = true;
                 } else {
-                    linhas.add(linha);  // Mantém a linha original
+                    linhas.add(linha);
                 }
             }
-        }catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (alterado == true) {
-            try (BufferedWriter escritor = new BufferedWriter(new FileWriter("Acao.txt"))) {
+        if (alterado) {
+            try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO))) {
                 for (String linha : linhas) {
                     escritor.write(linha);
                     escritor.newLine();
@@ -61,32 +68,31 @@ public class RepositorioEntidadeOperadora {
                 return false;
             }
         }
-
         return alterado;
     }
 
-    public boolean excluir(int identificador) {
+    public boolean excluir(long identificador) {
+
         List<String> linhas = new ArrayList<>();
         boolean deletado = false;
 
-        try (BufferedReader leitor = new BufferedReader(new FileReader("EntidadeOperadora.txt"))){
+        try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
             String linha;
             while ((linha = leitor.readLine()) != null) {
                 String[] divisao = linha.split(";");
 
-                // Verifica se o identificador da linha corresponde ao identificador da ação a ser alterada
-                if (Integer.parseInt(divisao[0]) == identificador) {
-                    deletado = true;  // Marca que a alteração foi feita
+                if (Long.parseLong(divisao[0]) == identificador) {
+                    deletado = true;
                 } else {
-                    linhas.add(linha);  // Mantém a linha original
+                    linhas.add(linha);
                 }
             }
-        }catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (deletado == true) {
-            try (BufferedWriter escritor = new BufferedWriter(new FileWriter("EntidadeOperadora.txt"))) {
+        if (deletado) {
+            try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO))) {
                 for (String linha : linhas) {
                     escritor.write(linha);
                     escritor.newLine();
@@ -96,44 +102,43 @@ public class RepositorioEntidadeOperadora {
                 return false;
             }
         }
-
         return deletado;
     }
 
-    public EntidadeOperadora buscar(int identificador) {
-        if(procurarId(identificador) == false){ // se não achar id igual
-            return null;
-        }
+    public EntidadeOperadora buscar(long identificador) {
 
-        try (BufferedReader leitor = new BufferedReader(new FileReader("EntidadeOperadora.txt"))) {
+        try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
             String linha;
-
             while ((linha = leitor.readLine()) != null) {
                 String[] divisao = linha.split(";");
 
-                if (Integer.parseInt(divisao[0]) == identificador) {
-                    return new EntidadeOperadora(identificador, divisao[1], divisao[2].equals("true"));
+                if (Long.parseLong(divisao[0]) == identificador) {
+                    return new EntidadeOperadora(
+                            identificador,
+                            divisao[1],
+                            Boolean.parseBoolean(divisao[2])
+                    );
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
-    private boolean procurarId(long identificador){ // had to change to LONG here instead of INT
-        try (BufferedReader leitor = new BufferedReader(new FileReader("EntidadeOperadora.txt"))) { //lê o texto
+    private boolean procurarId(long identificador) {
+
+        try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
             String linha;
             while ((linha = leitor.readLine()) != null) {
                 String[] partes = linha.split(";");
-                if (Integer.parseInt(partes[0]) == identificador) { //converte string em valor int
-                    return true; // Identificador encontrado
+                if (Long.parseLong(partes[0]) == identificador) {
+                    return true;
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false; // Identificador não encontrado
+        return false;
     }
 }
