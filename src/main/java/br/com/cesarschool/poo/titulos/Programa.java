@@ -33,7 +33,7 @@ public class Programa {
 
                 System.out.println("\nDigite o identificador: ");
                 identificador = ENTRADA.nextInt();
-                nome = ENTRADA.nextLine();
+                ENTRADA.nextLine();
 
                 System.out.println("\nDigite o nome: ");
                 nome = ENTRADA.nextLine();
@@ -55,14 +55,86 @@ public class Programa {
                 }else{
                     System.out.println(mensagem);
                 }
+            } else if (selecaoDentro == 2) {
+                int identificador;
+                String nome;
+                LocalDate dataDeValidade;
+                double valorUnitario;
+
+                System.out.println("\nDigite o identificador da linha a ser alterada: ");
+                identificador = ENTRADA.nextInt();
+                ENTRADA.nextLine();
+
+                System.out.println("\nDigite o nome: ");
+                nome = ENTRADA.nextLine();
+
+                System.out.println("\nDigite a data (yyyy-MM-dd): ");
+                String dataTexto = ENTRADA.nextLine();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                dataDeValidade = LocalDate.parse(dataTexto, formatter);
+
+                System.out.println("\nDigite o valor unitário: ");
+                valorUnitario = ENTRADA.nextDouble();
+
+                Acao acao = new Acao(identificador, nome, dataDeValidade, valorUnitario);
+
+                String mensagem = mediatorAcao.alterar(acao);
+
+                if(mensagem == null){
+                    System.out.println("Operação concluída com sucesso!");
+                }else{
+                    System.out.println(mensagem);
+                }
+            } else if (selecaoDentro == 3) {
+                int identificador;
+
+                System.out.println("\nDigite o identificador da linha a ser excluída: ");
+                identificador = ENTRADA.nextInt();
+                ENTRADA.nextLine();
+
+                String mensagem = mediatorAcao.excluir(identificador);
+
+                if(mensagem == null){
+                    System.out.println("Operação concluída com sucesso!");
+                }else{
+                    System.out.println(mensagem);
+                }
+            } else if (selecaoDentro == 4) {
+                int identificador;
+                String nome;
+                LocalDate dataDeValidade;
+                double valorUnitario;
+
+                System.out.println("\nDigite o identificador da linha a ser alterada: ");
+                identificador = ENTRADA.nextInt();
+                ENTRADA.nextLine();
+
+                System.out.println("\nDigite o nome: ");
+                nome = ENTRADA.nextLine();
+
+                System.out.println("\nDigite a data (yyyy-MM-dd): ");
+                String dataTexto = ENTRADA.nextLine();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                dataDeValidade = LocalDate.parse(dataTexto, formatter);
+
+                System.out.println("\nDigite o valor unitário: ");
+                valorUnitario = ENTRADA.nextDouble();
+
+                Acao acao = new Acao(identificador, nome, dataDeValidade, valorUnitario);
+
+                String mensagem = mediatorAcao.alterar(acao);
+
+                if(mensagem == null){
+                    System.out.println("Operação concluída com sucesso!");
+                }else{
+                    System.out.println(mensagem);
+                }
             }
 
-        }
-        if(selecaoFora == 2){
+        }else if(selecaoFora == 2){
             System.out.println("\nDigite o número da opção desejada:\n1.Incluir\n2.Alterar\n3.Excluir\n4.Buscar");
 
             selecaoDentro = ENTRADA.nextInt();
-
 
             MediatorEntdadeOperadora mediatorEntidade = MediatorEntdadeOperadora.getInstance();
             if (selecaoDentro == 1){
@@ -142,6 +214,10 @@ public class Programa {
                     System.out.println("Entidade não encontrada.");
                 }
             }
+        }else if(selecaoFora == 3){
+
+        }else if(selecaoFora == 4){
+
         }
     }
 }
