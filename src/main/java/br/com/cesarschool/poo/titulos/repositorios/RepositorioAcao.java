@@ -17,23 +17,8 @@ public class RepositorioAcao {
 	// Caminho constante para o arquivo
 	private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/Acao.txt";
 
-	// Método para garantir que o arquivo exista
-	private void verificarOuCriarArquivo() {
-		File arquivo = new File(CAMINHO_ARQUIVO);
-		if (!arquivo.exists()) {
-			try {
-				if (arquivo.createNewFile()) {
-					System.out.println("Arquivo Acao.txt criado com sucesso.");
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	public boolean incluir(Acao acao) {
-		verificarOuCriarArquivo(); // Garante que o arquivo existe
-
 		if (procurarId(acao.getIdentificador())) {
 			return false; // Identificador já existe
 		}
@@ -51,7 +36,6 @@ public class RepositorioAcao {
 	}
 
 	public boolean alterar(Acao acao) {
-		verificarOuCriarArquivo();
 
 		List<String> linhas = new ArrayList<>();
 		boolean alterado = false;
@@ -90,7 +74,6 @@ public class RepositorioAcao {
 	}
 
 	public boolean excluir(int identificador) {
-		verificarOuCriarArquivo();
 
 		List<String> linhas = new ArrayList<>();
 		boolean deletado = false;
@@ -126,7 +109,6 @@ public class RepositorioAcao {
 	}
 
 	public Acao buscar(int identificador) {
-		verificarOuCriarArquivo();
 
 		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
 			String linha;
@@ -148,8 +130,6 @@ public class RepositorioAcao {
 	}
 
 	private boolean procurarId(int identificador) {
-		verificarOuCriarArquivo();
-
 		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
 			String linha;
 			while ((linha = leitor.readLine()) != null) {

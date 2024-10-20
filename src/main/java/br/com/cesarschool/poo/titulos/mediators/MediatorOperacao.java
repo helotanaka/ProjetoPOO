@@ -101,7 +101,6 @@ import br.com.cesarschool.poo.titulos.entidades.Transacao;
 import br.com.cesarschool.poo.titulos.entidades.Acao;
 import br.com.cesarschool.poo.titulos.entidades.EntidadeOperadora;
 import br.com.cesarschool.poo.titulos.entidades.TituloDivida;
-import br.com.cesarschool.poo.titulos.entidades.Transacao;
 import br.com.cesarschool.poo.titulos.repositorios.RepositorioTransacao;
 
 import java.time.LocalDateTime;
@@ -112,7 +111,7 @@ public class MediatorOperacao {
 
     private MediatorAcao mediatorAcao = MediatorAcao.getInstance();
     private MediatorTituloDivida mediatorTituloDivida = MediatorTituloDivida.getInstance();
-    private MediatorEntdadeOperadora mediatorEntidadeOperadora = MediatorEntdadeOperadora.getInstance();
+    private MediatorEntidadeOperadora mediatorEntidadeOperadora = MediatorEntidadeOperadora.getInstance();
     private RepositorioTransacao repositorioTransacao = new RepositorioTransacao();
 
     private MediatorOperacao() {}
