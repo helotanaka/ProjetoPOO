@@ -24,65 +24,81 @@ public class ProgramaTituloDividaSwing {
     private void prepareGUI() {
         frame = new JFrame("Gerenciamento de Títulos de Dívida");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 400);
+        frame.setSize(500, 500);
         frame.setLayout(new BorderLayout(5, 5));
 
-        JPanel panel = new JPanel(new GridLayout(8, 2, 5, 5));
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(2, 2, 2, 2);  // margin around components
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+
         frame.add(panel, BorderLayout.NORTH);
 
-        panel.add(new JLabel("Identificador:"));
-        identificadorField = new JTextField();
-        panel.add(identificadorField);
+        panel.add(new JLabel("Identificador:"), gbc);
+        identificadorField = new JTextField(10);
+        panel.add(identificadorField, gbc);
 
-        panel.add(new JLabel("Nome:"));
-        nomeField = new JTextField();
-        panel.add(nomeField);
+        panel.add(new JLabel("Nome:"), gbc);
+        nomeField = new JTextField(10);
+        panel.add(nomeField, gbc);
 
-        panel.add(new JLabel("Data de Validade (yyyy-MM-dd):"));
-        dataValidadeField = new JTextField();
-        panel.add(dataValidadeField);
+        panel.add(new JLabel("Data de Validade (yyyy-MM-dd):"), gbc);
+        dataValidadeField = new JTextField(10);
+        panel.add(dataValidadeField, gbc);
 
-        panel.add(new JLabel("Taxa de Juros (%):"));
-        taxaJurosField = new JTextField();
-        panel.add(taxaJurosField);
+        panel.add(new JLabel("Taxa de Juros (%):"), gbc);
+        taxaJurosField = new JTextField(10);
+        panel.add(taxaJurosField, gbc);
 
-        panel.add(new JLabel("Montante para Cálculo:"));
-        montanteField = new JTextField();
-        panel.add(montanteField);
+        panel.add(new JLabel("Montante para Cálculo:"), gbc);
+        montanteField = new JTextField(10);
+        panel.add(montanteField, gbc);
+
+        // Setting up buttons in the next row
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
 
         incluirButton = new JButton("Incluir");
         incluirButton.addActionListener(this::handleIncluir);
-        panel.add(incluirButton);
+        panel.add(incluirButton, gbc);
 
         alterarButton = new JButton("Alterar");
         alterarButton.addActionListener(this::handleAlterar);
-        panel.add(alterarButton);
+        panel.add(alterarButton, gbc);
 
         excluirButton = new JButton("Excluir");
         excluirButton.addActionListener(this::handleExcluir);
-        panel.add(excluirButton);
+        panel.add(excluirButton, gbc);
 
         buscarButton = new JButton("Buscar");
         buscarButton.addActionListener(this::handleBuscar);
-        panel.add(buscarButton);
+        panel.add(buscarButton, gbc);
 
         calcularPrecoButton = new JButton("Calcular Preço");
         calcularPrecoButton.addActionListener(this::handleCalcularPreco);
-        panel.add(calcularPrecoButton);
+        panel.add(calcularPrecoButton, gbc);
 
         ajustarTaxaButton = new JButton("Ajustar Taxa");
         ajustarTaxaButton.addActionListener(this::handleAjustarTaxa);
-        panel.add(ajustarTaxaButton);
+        panel.add(ajustarTaxaButton, gbc);
 
         consultarTaxaButton = new JButton("Consultar Taxa");
         consultarTaxaButton.addActionListener(this::handleConsultarTaxa);
-        panel.add(consultarTaxaButton);
+        panel.add(consultarTaxaButton, gbc);
 
         outputArea = new JTextArea(5, 20);
         frame.add(new JScrollPane(outputArea), BorderLayout.CENTER);
 
+        frame.pack();  // Pack frame to respect preferred sizes
         frame.setVisible(true);
     }
+
 
     private void handleIncluir(ActionEvent e) {
         // Parse fields and call mediator.incluir(new TituloDivida(...))
