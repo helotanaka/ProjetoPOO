@@ -100,10 +100,11 @@ public class MediatorTituloDivida {
     public String incluir(TituloDivida titulo) {
         String mensagemValidacao = validar(titulo);
         if (mensagemValidacao != null) {
-            return mensagemValidacao;
+            return mensagemValidacao; // Retorna mensagem de erro se houver
         }
+
         boolean incluido = repositorioTituloDivida.incluir(titulo);
-        return incluido ? null : "Título já existente";
+        return incluido ? null : "Título já existente"; // Retorna null se incluído com sucesso
     }
 
     // Método público para alterar um Título de Dívida no repositório

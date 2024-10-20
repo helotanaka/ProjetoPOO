@@ -3,7 +3,9 @@ package br.com.cesarschool.poo.titulos;
 import br.com.cesarschool.poo.titulos.entidades.Acao;
 import br.com.cesarschool.poo.titulos.entidades.EntidadeOperadora;
 import br.com.cesarschool.poo.titulos.entidades.TituloDivida;
+import br.com.cesarschool.poo.titulos.entidades.Transacao;
 import br.com.cesarschool.poo.titulos.mediators.MediatorAcao;
+import br.com.cesarschool.poo.titulos.mediators.MediatorOperacao;
 import br.com.cesarschool.poo.titulos.mediators.MediatorTituloDivida;
 import br.com.cesarschool.poo.titulos.mediators.MediatorEntidadeOperadora;
 
@@ -14,7 +16,9 @@ import java.util.Scanner;
 public class Programa {
     static Scanner ENTRADA = new Scanner(System.in);
     static MediatorAcao mediatorAcao = MediatorAcao.getInstance();
+    static MediatorEntidadeOperadora mediatorEntidade = MediatorEntidadeOperadora.getInstance();
     static MediatorTituloDivida mediatorTituloDivida = MediatorTituloDivida.getInstance();
+    static MediatorOperacao mediatorOperacao = MediatorOperacao.getInstance();
 
 
     public static void main(String[] args) {
@@ -120,8 +124,7 @@ public class Programa {
 
             selecaoDentro = ENTRADA.nextInt();
 
-            MediatorEntidadeOperadora mediatorEntidade = MediatorEntidadeOperadora.getInstance();
-            if (selecaoDentro == 1){
+             if (selecaoDentro == 1){
                     // Incluir
                     System.out.println("\nDigite o identificador(DEVE ESTAR ENTRE 100 E 1000): ");
                     long identificador = ENTRADA.nextLong();
@@ -210,6 +213,7 @@ public class Programa {
                     double valor = ENTRADA.nextDouble();
 
                     entidade.creditarSaldoAcao(valor);
+                    mediatorEntidade.alterar(entidade);
 
                     System.out.println("Valor creditado com sucesso! ");
                 }else if(opcao == 2){
@@ -222,6 +226,7 @@ public class Programa {
                     double valor = ENTRADA.nextDouble();
 
                     entidade.debitarSaldoAcao(valor);
+                    mediatorEntidade.alterar(entidade);
 
                     System.out.println("Valor debitado com sucesso! ");
                 }
@@ -240,6 +245,7 @@ public class Programa {
                     double valor = ENTRADA.nextDouble();
 
                     entidade.creditarSaldoTituloDivida(valor);
+                    mediatorEntidade.alterar(entidade);
 
                     System.out.println("Valor creditado com sucesso! ");
                 }else if(opcao == 2){
@@ -252,6 +258,7 @@ public class Programa {
                     double valor = ENTRADA.nextDouble();
 
                     entidade.debitarSaldoTituloDivida(valor);
+                    mediatorEntidade.alterar(entidade);
 
                     System.out.println("Valor debitado com sucesso! ");
                 }
@@ -262,11 +269,11 @@ public class Programa {
             System.out.println("\nDigite o número da opção desejada:\n1.Incluir\n2.Alterar\n3.Excluir\n4.Buscar\n5.Visualizar preço da Transação\n6. Ajustar apenas Taxa de Juros\n7. Consultar apenas Taxa de Juros\n"); // ainda incluirget taxa juros , set taxa juros , calcularPrecoTransacao
             selecaoDentro = ENTRADA.nextInt();
 
-            if (selecaoDentro == 1){
-                //incluir
-                System.out.println("\\nDigite o identificador (1-99999):");
+            if (selecaoDentro == 1) {
+                // Inclusão
+                System.out.println("\nDigite o identificador (1-99999):");
                 int identificador = ENTRADA.nextInt();
-                ENTRADA.nextLine(); // nosso clear de todo dia, já q teve o enter
+                ENTRADA.nextLine(); // Limpar buffer
 
                 System.out.println("\nDigite o nome (10-100 caracteres): ");
                 String nome = ENTRADA.nextLine();
@@ -282,19 +289,19 @@ public class Programa {
                 TituloDivida titulo = new TituloDivida(identificador, nome, dataDeValidade, taxaJuros);
                 String mensagem = mediatorTituloDivida.incluir(titulo);
 
-                if(mensagem.equals("Título já existente")){
+                // Verificação corrigida
+                if ("Título já existente".equals(mensagem)) {
                     System.out.println(mensagem);
-                }else if (mensagem == null){
+                } else if (mensagem == null) {
                     System.out.println("Título de Dívida incluído com sucesso!");
                 }
-
-
             }
+
 
             if (selecaoDentro == 2){
                 //alterar
 
-                System.out.println("\\nDigite o identificador (1-99999):");
+                System.out.println("\nDigite o identificador (1-99999):");
                 int identificador = ENTRADA.nextInt();
                 ENTRADA.nextLine(); // nosso clear de todo dia, já q teve o enter
 
@@ -400,8 +407,60 @@ public class Programa {
 
 
 
-        }else if(selecaoFora == 4){
+        }
+        else if (selecaoFora == 4) {
+            System.out.println("\nDigite o número da opção desejada:\n1.Realizar Operação\n2.Buscar Transações");
+            selecaoDentro = ENTRADA.nextInt();
 
+            if (selecaoDentro == 1) {
+                // Coleta de dados para realizar a operação
+                System.out.println("\nDigite o identificador da entidade crédito: ");
+                int idCredito = ENTRADA.nextInt();
+
+                System.out.println("\nDigite o identificador da entidade débito: ");
+                int idDebito = ENTRADA.nextInt();
+
+                System.out.println("\nÉ uma operação de Ação? (true/false): ");
+                boolean ehAcao = ENTRADA.nextBoolean();
+
+                System.out.println("\nDigite o identificador da Ação ou Título: ");
+                int idAcaoOuTitulo = ENTRADA.nextInt();
+
+                System.out.println("\nDigite o valor da operação: ");
+                double valorOperacao = ENTRADA.nextDouble();
+                if (valorOperacao <= 0) {
+                    System.out.println("Valor inválido.");
+                    return;
+                }
+
+                String mensagem = mediatorOperacao.realizarOperacao(ehAcao, idCredito, idDebito, idAcaoOuTitulo, valorOperacao);
+
+                if (mensagem == null) {
+                    System.out.println("Operação realizada com sucesso!");
+                } else {
+                    System.out.println("Erro: " + mensagem);
+                }
+
+            } else if (selecaoDentro == 2) {
+                System.out.println("\nDigite o identificador da entidade para buscar transações: ");
+                int idEntidade = ENTRADA.nextInt();
+
+                Transacao[] extrato = mediatorOperacao.gerarExtrato(idEntidade);
+                if (extrato.length == 0) {
+                    System.out.println("Nenhuma transação encontrada para essa entidade.");
+                } else {
+                    System.out.println("Transações encontradas:");
+                    for (Transacao transacao : extrato) {
+                        System.out.println("Data/Hora: " + transacao.getDataHoraOperacao());
+                        System.out.println("Valor: " + transacao.getValorOperacao());
+                        System.out.println("Crédito: " + transacao.getEntidadeCredito().getNome());
+                        System.out.println("Débito: " + transacao.getEntidadeDebito().getNome());
+                        System.out.println("Ação: " + (transacao.getAcao() != null ? transacao.getAcao().getNome() : "N/A"));
+                        System.out.println("Título Dívida: " + (transacao.getTituloDivida() != null ? transacao.getTituloDivida().getNome() : "N/A"));
+                        System.out.println("----------------------------");
+                    }
+                }
+            }
         }
     }
 }

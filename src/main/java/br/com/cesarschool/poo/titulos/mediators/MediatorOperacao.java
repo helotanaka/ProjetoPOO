@@ -172,9 +172,12 @@ public class MediatorOperacao {
 
     public Transacao[] gerarExtrato(int entidade) {
         Transacao[] transacoesCredoras = repositorioTransacao.buscarPorEntidadeCredora(entidade);
-        Transacao[] transacoesDevedoras = repositorioTransacao.buscarPorEntidadeDevedora(entidade); // criei
+        return combineAndSort(transacoesCredoras);
+    }
 
-        return combineAndSort(transacoesCredoras, transacoesDevedoras);
+    private Transacao[] combineAndSort(Transacao[] credoras) {
+        Arrays.sort(credoras, (a, b) -> b.getDataHoraOperacao().compareTo(a.getDataHoraOperacao()));
+        return credoras;
     }
 
     private Transacao[] combineAndSort(Transacao[] credoras, Transacao[] devedoras) {

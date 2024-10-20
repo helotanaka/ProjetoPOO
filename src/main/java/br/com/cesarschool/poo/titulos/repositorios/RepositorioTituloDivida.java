@@ -9,16 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RepositorioTituloDivida {
+
+	private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/TituloDivida.txt";
+
+
 	public boolean incluir(TituloDivida tituloDivida) {
-		if(procurarId(tituloDivida.getIdentificador()) == true){ // se achar id igual
-			return false;
+
+		if (procurarId(tituloDivida.getIdentificador())) {
+			return false; // Identificador já existe
 		}
 
-		try (BufferedWriter escritor = new BufferedWriter(new FileWriter("TituloDivida.txt", true))) {// escrever no arquivo
-			String frase = tituloDivida.getIdentificador() + ";" + tituloDivida.getNome() + ";" + tituloDivida.getDataDeValidade() +";" + tituloDivida.getTaxaJuros();
-			escritor.write(frase); //Coloca a frase no txt
-			escritor.newLine(); // Adiciona uma nova linha
-			return true; // Inclusão com sucesso
+		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO, true))) {
+			String frase = tituloDivida.getIdentificador() + ";" + tituloDivida.getNome() + ";" +
+					tituloDivida.getDataDeValidade() + ";" + tituloDivida.getTaxaJuros();
+			escritor.write(frase);
+			escritor.newLine();
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -29,27 +35,26 @@ public class RepositorioTituloDivida {
 		List<String> linhas = new ArrayList<>();
 		boolean alterado = false;
 
-		try (BufferedReader leitor = new BufferedReader(new FileReader("TituloDivida.txt"))){
+		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
 			String linha;
 			while ((linha = leitor.readLine()) != null) {
 				String[] divisao = linha.split(";");
 
-				// Verifica se o identificador da linha corresponde ao identificador da ação a ser alterada
 				if (Integer.parseInt(divisao[0]) == tituloDivida.getIdentificador()) {
-					// Monta a nova linha com os dados da ação fornecida
-					String novaLinha = tituloDivida.getIdentificador() + ";" + tituloDivida.getNome() + ";" + tituloDivida.getDataDeValidade() +";" + tituloDivida.getTaxaJuros();
-					linhas.add(novaLinha);  // Adiciona a nova linha no lugar da antiga
-					alterado = true;  // Marca que a alteração foi feita
+					String novaLinha = tituloDivida.getIdentificador() + ";" + tituloDivida.getNome() + ";" +
+							tituloDivida.getDataDeValidade() + ";" + tituloDivida.getTaxaJuros();
+					linhas.add(novaLinha);
+					alterado = true;
 				} else {
-					linhas.add(linha);  // Mantém a linha original
+					linhas.add(linha);
 				}
 			}
-		}catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		if (alterado == true) {
-			try (BufferedWriter escritor = new BufferedWriter(new FileWriter("TituloDivida.txt"))) {
+		if (alterado) {
+			try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO))) {
 				for (String linha : linhas) {
 					escritor.write(linha);
 					escritor.newLine();
@@ -59,32 +64,31 @@ public class RepositorioTituloDivida {
 				return false;
 			}
 		}
-
 		return alterado;
 	}
 
 	public boolean excluir(int identificador) {
+
 		List<String> linhas = new ArrayList<>();
 		boolean deletado = false;
 
-		try (BufferedReader leitor = new BufferedReader(new FileReader("TituloDivida.txt"))){
+		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
 			String linha;
 			while ((linha = leitor.readLine()) != null) {
 				String[] divisao = linha.split(";");
 
-				// Verifica se o identificador da linha corresponde ao identificador da ação a ser alterada
 				if (Integer.parseInt(divisao[0]) == identificador) {
-					deletado = true;  // Marca que a alteração foi feita
+					deletado = true;
 				} else {
-					linhas.add(linha);  // Mantém a linha original
+					linhas.add(linha);
 				}
 			}
-		}catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		if (deletado == true) {
-			try (BufferedWriter escritor = new BufferedWriter(new FileWriter("TituloDivida.txt"))) {
+		if (deletado) {
+			try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO))) {
 				for (String linha : linhas) {
 					escritor.write(linha);
 					escritor.newLine();
@@ -94,54 +98,47 @@ public class RepositorioTituloDivida {
 				return false;
 			}
 		}
-
 		return deletado;
 	}
 
 	public TituloDivida buscar(int identificador) {
-		if(procurarId(identificador) == false){ // se não achar id igual
-			return null;
-		}
 
-		try (BufferedReader leitor = new BufferedReader(new FileReader("TituloDivida.txt"))) {
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
 			String linha;
-			DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
 			while ((linha = leitor.readLine()) != null) {
 				String[] divisao = linha.split(";");
 
 				if (Integer.parseInt(divisao[0]) == identificador) {
-					// Converte a string para LocalDate
-					LocalDate data;
-					try {
-						data = LocalDate.parse(divisao[2], formato); // converte a string da data
-					} catch (DateTimeParseException e) {
-						e.printStackTrace();
-						return null;
-					}
-
-					return new TituloDivida(identificador, divisao[1], data, Double.parseDouble(divisao[3]));
+					LocalDate data = LocalDate.parse(divisao[2], formato);
+					return new TituloDivida(
+							identificador,
+							divisao[1],
+							data,
+							Double.parseDouble(divisao[3])
+					);
 				}
 			}
-		} catch (IOException e) {
+		} catch (IOException | DateTimeParseException e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 
-	private boolean procurarId(int identificador){
-		try (BufferedReader leitor = new BufferedReader(new FileReader("TituloDivida.txt"))) { //lê o texto
+	private boolean procurarId(int identificador) {
+
+		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
 			String linha;
 			while ((linha = leitor.readLine()) != null) {
 				String[] partes = linha.split(";");
-				if (Integer.parseInt(partes[0]) == identificador) { //converte string em valor int
-					return true; // Identificador encontrado
+				if (Integer.parseInt(partes[0]) == identificador) {
+					return true;
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return false; // Identificador não encontrado
+		return false;
 	}
 }
