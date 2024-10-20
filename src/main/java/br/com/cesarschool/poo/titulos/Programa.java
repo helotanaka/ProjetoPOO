@@ -2,7 +2,9 @@ package br.com.cesarschool.poo.titulos;
 
 import br.com.cesarschool.poo.titulos.entidades.Acao;
 import br.com.cesarschool.poo.titulos.entidades.EntidadeOperadora;
+import br.com.cesarschool.poo.titulos.entidades.TituloDivida;
 import br.com.cesarschool.poo.titulos.mediators.MediatorAcao;
+import br.com.cesarschool.poo.titulos.mediators.MediatorTituloDivida;
 import br.com.cesarschool.poo.titulos.mediators.MediatorEntidadeOperadora;
 
 import java.time.LocalDate;
@@ -12,12 +14,15 @@ import java.util.Scanner;
 public class Programa {
     static Scanner ENTRADA = new Scanner(System.in);
     static MediatorAcao mediatorAcao = MediatorAcao.getInstance();
+    static MediatorTituloDivida mediatorTituloDivida = MediatorTituloDivida.getInstance();
+
+
     public static void main(String[] args) {
         System.out.println("Atividade POO");
 
         int selecaoFora, selecaoDentro;
 
-        System.out.println("\nDigite o número da opção desejada:\n1.Ação\n2.Entidade Operadora\n3.Tútulo Dívida\n4.Transação");
+        System.out.println("\nDigite o número da opção desejada:\n1.Ação\n2.Entidade Operadora\n3.Título Dívida\n4.Transação");
         selecaoFora = ENTRADA.nextInt();
 
         if (selecaoFora == 1) {
@@ -253,6 +258,147 @@ public class Programa {
             }
         }
         else if(selecaoFora == 3){
+
+            System.out.println("\nDigite o número da opção desejada:\n1.Incluir\n2.Alterar\n3.Excluir\n4.Buscar\n5.Visualizar preço da Transação\n6. Ajustar apenas Taxa de Juros\n7. Consultar apenas Taxa de Juros\n"); // ainda incluirget taxa juros , set taxa juros , calcularPrecoTransacao
+            selecaoDentro = ENTRADA.nextInt();
+
+            if (selecaoDentro == 1){
+                //incluir
+                System.out.println("\\nDigite o identificador (1-99999):");
+                int identificador = ENTRADA.nextInt();
+                ENTRADA.nextLine(); // nosso clear de todo dia, já q teve o enter
+
+                System.out.println("\nDigite o nome (10-100 caracteres): ");
+                String nome = ENTRADA.nextLine();
+
+                System.out.println("\nDigite a data de validade (yyyy-MM-dd): ");
+                String dataTexto = ENTRADA.nextLine();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate dataDeValidade = LocalDate.parse(dataTexto, formatter);
+
+                System.out.println("\nDigite a taxa de juros: ");
+                double taxaJuros = ENTRADA.nextDouble();
+
+                TituloDivida titulo = new TituloDivida(identificador, nome, dataDeValidade, taxaJuros);
+                String mensagem = mediatorTituloDivida.incluir(titulo);
+
+                if(mensagem.equals("Título já existente")){
+                    System.out.println(mensagem);
+                }else if (mensagem == null){
+                    System.out.println("Título de Dívida incluído com sucesso!");
+                }
+
+
+            }
+
+            if (selecaoDentro == 2){
+                //alterar
+
+                System.out.println("\\nDigite o identificador (1-99999):");
+                int identificador = ENTRADA.nextInt();
+                ENTRADA.nextLine(); // nosso clear de todo dia, já q teve o enter
+
+                System.out.println("\nDigite o nome (10-100 caracteres): ");
+                String nome = ENTRADA.nextLine();
+
+                System.out.println("\nDigite a data de validade (yyyy-MM-dd): ");
+                String dataTexto = ENTRADA.nextLine();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate dataDeValidade = LocalDate.parse(dataTexto, formatter);
+
+                System.out.println("\nDigite a taxa de juros: ");
+                double taxaJuros = ENTRADA.nextDouble();
+
+                TituloDivida titulo = new TituloDivida(identificador, nome, dataDeValidade, taxaJuros);
+                String mensagem = mediatorTituloDivida.alterar(titulo);
+
+                if(mensagem.equals("Título inexistente")){
+                    System.out.println(mensagem);
+                }else if (mensagem == null){
+                    System.out.println("Título de Dívida atualizado com sucesso!");
+                }
+
+
+            }
+
+            if (selecaoDentro == 3){
+//excluir
+                System.out.println("\nDigite o identificador do título a ser excluído: ");
+                int identificador = ENTRADA.nextInt();
+                String mensagem = mediatorTituloDivida.excluir(identificador);
+
+                if(mensagem == null){
+                    System.out.println("Título de Dívida excluído com sucesso!");
+                } else {
+                    System.out.println(mensagem);
+                }
+
+            }
+
+            if (selecaoDentro == 4){
+                //buscar
+                System.out.println("\nDigite o identificador do título a ser buscado: ");
+                int identificador = ENTRADA.nextInt();
+                TituloDivida tituloEncontrado = mediatorTituloDivida.buscar(identificador);
+
+                if(tituloEncontrado != null){
+                    System.out.println("Título de Dívida encontrado:");
+                    System.out.println("Identificador: " + tituloEncontrado.getIdentificador());
+                    System.out.println("Nome: " + tituloEncontrado.getNome());
+                    System.out.println("Data de Validade: " + tituloEncontrado.getDataDeValidade());
+                    System.out.println("Taxa de Juros: " + tituloEncontrado.getTaxaJuros());
+                } else {
+                    System.out.println("Título de Dívida não encontrado.");
+                }
+
+            }
+
+            if (selecaoDentro == 5){
+
+                // Calcular preço de transação
+                System.out.println("\nDigite o identificador do título para cálculo: ");
+                int identificador = ENTRADA.nextInt();
+                TituloDivida titulo = mediatorTituloDivida.buscar(identificador);
+                if (titulo != null) {
+                    System.out.println("\nDigite o montante para cálculo: ");
+                    double montante = ENTRADA.nextDouble();
+                    double precoTransacao = titulo.calcularPrecoTransacao(montante);
+                    System.out.println("Preço após transação: " + precoTransacao);
+                } else {
+                    System.out.println("Título de Dívida não encontrado.");
+                }
+
+            }
+
+            if (selecaoDentro == 6){
+                //Ajuste taxa de juros
+                System.out.println("\nDigite o identificador do título para ajuste da taxa de juros: ");
+                int identificador = ENTRADA.nextInt();
+                TituloDivida titulo = mediatorTituloDivida.buscar(identificador);
+                if (titulo != null) {
+                    System.out.println("\nDigite a nova taxa de juros (%): ");
+                    double novaTaxa = ENTRADA.nextDouble();
+                    titulo.setTaxaJuros(novaTaxa);
+                    System.out.println("Taxa de juros atualizada com sucesso!");
+                } else {
+                    System.out.println("Título de Dívida não encontrado.");
+                }
+            }
+
+            if (selecaoDentro == 7){
+                //consultar taxa de juros
+                System.out.println("\nDigite o identificador do título para consulta de taxa de juros: ");
+                int identificador = ENTRADA.nextInt();
+                TituloDivida titulo = mediatorTituloDivida.buscar(identificador);
+                if (titulo != null) {
+                    System.out.println("Taxa de juros atual: " + titulo.getTaxaJuros() + "%");
+                } else {
+                    System.out.println("Título de Dívida não encontrado.");
+                }
+
+            }
+
+
 
         }else if(selecaoFora == 4){
 
