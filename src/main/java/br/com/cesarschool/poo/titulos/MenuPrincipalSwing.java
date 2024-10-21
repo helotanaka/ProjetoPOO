@@ -43,7 +43,7 @@ public class MenuPrincipalSwing {
 
     private void abrirAcao() {
         // Abre a interface de gerenciamento de Ações
-        //SwingUtilities.invokeLater(ProgramaAcaoSwing::new);
+        SwingUtilities.invokeLater(ProgramaAcaoSwing::new);
     }
 
     private void abrirEntidadeOperadora() {
