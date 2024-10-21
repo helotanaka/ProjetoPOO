@@ -2,12 +2,8 @@ package br.com.cesarschool.poo.titulos;
 
 import br.com.cesarschool.poo.titulos.entidades.*;
 import br.com.cesarschool.poo.titulos.mediators.*;
-
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -45,7 +41,6 @@ public class Programa {
         frame.setVisible(true);
     }
 
-    // --- Menu Ação ---
     private static void mostrarMenuAcao() {
         JFrame frame = new JFrame("Menu Ação");
         frame.setSize(300, 200);
@@ -193,444 +188,445 @@ public class Programa {
         }
     }
 
-        public static void mostrarMenuEntidade() {
-            JFrame frame = new JFrame("Menu Entidade Operadora");
-            frame.setSize(400, 300);
-            frame.setLayout(new GridLayout(6, 1));
+    public static void mostrarMenuEntidade() {
+        JFrame frame = new JFrame("Menu Entidade Operadora");
+        frame.setSize(400, 300);
+        frame.setLayout(new GridLayout(6, 1));
 
-            JButton btnIncluir = new JButton("Incluir Entidade");
-            JButton btnAlterar = new JButton("Alterar Entidade");
-            JButton btnExcluir = new JButton("Excluir Entidade");
-            JButton btnBuscar = new JButton("Buscar Entidade");
-            JButton btnOperacaoSaldoAcao = new JButton("Operações Saldo Ação");
-            JButton btnOperacaoTituloDivida = new JButton("Operações Título Dívida");
+        JButton btnIncluir = new JButton("Incluir Entidade");
+        JButton btnAlterar = new JButton("Alterar Entidade");
+        JButton btnExcluir = new JButton("Excluir Entidade");
+        JButton btnBuscar = new JButton("Buscar Entidade");
+        JButton btnOperacaoSaldoAcao = new JButton("Operações Saldo Ação");
+        JButton btnOperacaoTituloDivida = new JButton("Operações Título Dívida");
 
-            btnIncluir.addActionListener(e -> incluirEntidade());
-            btnAlterar.addActionListener(e -> alterarEntidade());
-            btnExcluir.addActionListener(e -> excluirEntidade());
-            btnBuscar.addActionListener(e -> buscarEntidade());
-            btnOperacaoSaldoAcao.addActionListener(e -> operacaoSaldoAcao());
-            btnOperacaoTituloDivida.addActionListener(e -> operacaoTituloDivida());
+        btnIncluir.addActionListener(e -> incluirEntidade());
+        btnAlterar.addActionListener(e -> alterarEntidade());
+        btnExcluir.addActionListener(e -> excluirEntidade());
+        btnBuscar.addActionListener(e -> buscarEntidade());
+        btnOperacaoSaldoAcao.addActionListener(e -> operacaoSaldoAcao());
+        btnOperacaoTituloDivida.addActionListener(e -> operacaoTituloDivida());
 
-            frame.add(btnIncluir);
-            frame.add(btnAlterar);
-            frame.add(btnExcluir);
-            frame.add(btnBuscar);
-            frame.add(btnOperacaoSaldoAcao);
-            frame.add(btnOperacaoTituloDivida);
+        frame.add(btnIncluir);
+        frame.add(btnAlterar);
+        frame.add(btnExcluir);
+        frame.add(btnBuscar);
+        frame.add(btnOperacaoSaldoAcao);
+        frame.add(btnOperacaoTituloDivida);
 
-            frame.setVisible(true);
-        }
+        frame.setVisible(true);
+    }
 
-        private static void incluirEntidade() {
-            JTextField txtId = new JTextField();
-            JTextField txtNome = new JTextField();
-            JCheckBox chkAutorizacao = new JCheckBox("Autorização de Ação");
+    private static void incluirEntidade() {
+        JTextField txtId = new JTextField();
+        JTextField txtNome = new JTextField();
+        JCheckBox chkAutorizacao = new JCheckBox("Autorização de Ação");
 
-            Object[] inputs = {
-                    "Identificador (100-1000):", txtId,
-                    "Nome (10-100 caracteres):", txtNome,
-                    chkAutorizacao
-            };
+        Object[] inputs = {
+                "Identificador (100-1000):", txtId,
+                "Nome (10-100 caracteres):", txtNome,
+                chkAutorizacao
+        };
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Incluir Entidade", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    long id = Long.parseLong(txtId.getText());
-                    String nome = txtNome.getText();
-                    boolean autorizacao = chkAutorizacao.isSelected();
+        if (JOptionPane.showConfirmDialog(null, inputs, "Incluir Entidade", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                long id = Long.parseLong(txtId.getText());
+                String nome = txtNome.getText();
+                boolean autorizacao = chkAutorizacao.isSelected();
 
-                    EntidadeOperadora entidade = new EntidadeOperadora(id, nome, autorizacao);
-                    String mensagem = mediatorEntidade.incluir(entidade);
+                EntidadeOperadora entidade = new EntidadeOperadora(id, nome, autorizacao);
+                String mensagem = mediatorEntidade.incluir(entidade);
 
-                    JOptionPane.showMessageDialog(null, mensagem == null ? "Entidade incluída com sucesso!" : "Erro: " + mensagem);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
-                }
+                JOptionPane.showMessageDialog(null, mensagem == null ? "Entidade incluída com sucesso!" : "Erro: " + mensagem);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
-        private static void alterarEntidade() {
-            JTextField txtId = new JTextField();
-            JTextField txtNome = new JTextField();
-            JCheckBox chkAutorizacao = new JCheckBox("Nova Autorização de Ação");
+    private static void alterarEntidade() {
+        JTextField txtId = new JTextField();
+        JTextField txtNome = new JTextField();
+        JCheckBox chkAutorizacao = new JCheckBox("Nova Autorização de Ação");
 
-            Object[] inputs = {
-                    "Identificador da Entidade:", txtId,
-                    "Novo Nome:", txtNome,
-                    chkAutorizacao
-            };
+        Object[] inputs = {
+                "Identificador da Entidade:", txtId,
+                "Novo Nome:", txtNome,
+                chkAutorizacao
+        };
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Alterar Entidade", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    long id = Long.parseLong(txtId.getText());
-                    String nome = txtNome.getText();
-                    boolean autorizacao = chkAutorizacao.isSelected();
+        if (JOptionPane.showConfirmDialog(null, inputs, "Alterar Entidade", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                long id = Long.parseLong(txtId.getText());
+                String nome = txtNome.getText();
+                boolean autorizacao = chkAutorizacao.isSelected();
 
-                    EntidadeOperadora entidade = new EntidadeOperadora(id, nome, autorizacao);
-                    String mensagem = mediatorEntidade.alterar(entidade);
+                EntidadeOperadora entidade = new EntidadeOperadora(id, nome, autorizacao);
+                String mensagem = mediatorEntidade.alterar(entidade);
 
-                    JOptionPane.showMessageDialog(null, mensagem == null ? "Entidade alterada com sucesso!" : "Erro: " + mensagem);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
-                }
+                JOptionPane.showMessageDialog(null, mensagem == null ? "Entidade alterada com sucesso!" : "Erro: " + mensagem);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
-        private static void excluirEntidade() {
-            JTextField txtId = new JTextField();
-            Object[] inputs = {"Identificador da Entidade:", txtId};
+    private static void excluirEntidade() {
+        JTextField txtId = new JTextField();
+        Object[] inputs = {"Identificador da Entidade:", txtId};
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Excluir Entidade", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    long id = Long.parseLong(txtId.getText());
-                    String mensagem = mediatorEntidade.excluir((int) id);
+        if (JOptionPane.showConfirmDialog(null, inputs, "Excluir Entidade", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                long id = Long.parseLong(txtId.getText());
+                String mensagem = mediatorEntidade.excluir((int) id);
 
-                    JOptionPane.showMessageDialog(null, mensagem == null ? "Entidade excluída com sucesso!" : "Erro: " + mensagem);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
-                }
+                JOptionPane.showMessageDialog(null, mensagem == null ? "Entidade excluída com sucesso!" : "Erro: " + mensagem);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
-        private static void buscarEntidade() {
-            JTextField txtId = new JTextField();
-            Object[] inputs = {"Identificador da Entidade:", txtId};
+    private static void buscarEntidade() {
+        JTextField txtId = new JTextField();
+        Object[] inputs = {"Identificador da Entidade:", txtId};
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Buscar Entidade", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    long id = Long.parseLong(txtId.getText());
-                    EntidadeOperadora entidade = mediatorEntidade.buscar((int) id);
+        if (JOptionPane.showConfirmDialog(null, inputs, "Buscar Entidade", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                long id = Long.parseLong(txtId.getText());
+                EntidadeOperadora entidade = mediatorEntidade.buscar((int) id);
 
-                    if (entidade != null) {
-                        JOptionPane.showMessageDialog(null, String.format(
-                                "Entidade Encontrada:\nID: %d\nNome: %s\nAutorização: %b\nSaldo Ação: %.2f\nSaldo Título: %.2f",
-                                entidade.getIdentificador(), entidade.getNome(), entidade.getAutorizacaoAcao(),
-                                entidade.getSaldoAcao(), entidade.getSaldoTituloDivida()
-                        ));
+                if (entidade != null) {
+                    JOptionPane.showMessageDialog(null, String.format(
+                            "Entidade Encontrada:\nID: %d\nNome: %s\nAutorização: %b\nSaldo Ação: %.2f\nSaldo Título: %.2f",
+                            entidade.getIdentificador(), entidade.getNome(), entidade.getAutorizacaoAcao(),
+                            entidade.getSaldoAcao(), entidade.getSaldoTituloDivida()
+                    ));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Entidade não encontrada.");
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
+            }
+        }
+    }
+
+    private static void operacaoSaldoAcao() {
+        String[] opcoes = {"Creditar", "Debitar"};
+        int opcao = JOptionPane.showOptionDialog(null, "Selecione a operação:", "Operação Saldo Ação",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
+
+        if (opcao != -1) {
+            realizarOperacaoSaldo(opcao == 0, true);
+        }
+    }
+
+    private static void operacaoTituloDivida() {
+        String[] opcoes = {"Creditar", "Debitar"};
+        int opcao = JOptionPane.showOptionDialog(null, "Selecione a operação:", "Operação Título Dívida",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
+
+        if (opcao != -1) {
+            realizarOperacaoSaldo(opcao == 0, false);
+        }
+    }
+
+    private static void realizarOperacaoSaldo(boolean isCredito, boolean isAcao) {
+        JTextField txtId = new JTextField();
+        JTextField txtValor = new JTextField();
+
+        Object[] inputs = {
+                "Identificador da Entidade:", txtId,
+                "Valor:", txtValor
+        };
+
+        if (JOptionPane.showConfirmDialog(null, inputs, "Operação Saldo", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                long id = Long.parseLong(txtId.getText());
+                double valor = Double.parseDouble(txtValor.getText());
+                EntidadeOperadora entidade = mediatorEntidade.buscar((int) id);
+
+                if (entidade != null) {
+                    if (isAcao) {
+                        if (isCredito) entidade.creditarSaldoAcao(valor);
+                        else entidade.debitarSaldoAcao(valor);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Entidade não encontrada.");
+                        if (isCredito) entidade.creditarSaldoTituloDivida(valor);
+                        else entidade.debitarSaldoTituloDivida(valor);
                     }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
+                    JOptionPane.showMessageDialog(null, "Operação realizada com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Entidade não encontrada.");
                 }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
-        private static void operacaoSaldoAcao() {
-            String[] opcoes = {"Creditar", "Debitar"};
-            int opcao = JOptionPane.showOptionDialog(null, "Selecione a operação:", "Operação Saldo Ação",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
-
-            if (opcao != -1) {
-                realizarOperacaoSaldo(opcao == 0, true);
-            }
-        }
-
-        private static void operacaoTituloDivida() {
-            String[] opcoes = {"Creditar", "Debitar"};
-            int opcao = JOptionPane.showOptionDialog(null, "Selecione a operação:", "Operação Título Dívida",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
-
-            if (opcao != -1) {
-                realizarOperacaoSaldo(opcao == 0, false);
-            }
-        }
-
-        private static void realizarOperacaoSaldo(boolean isCredito, boolean isAcao) {
-            JTextField txtId = new JTextField();
-            JTextField txtValor = new JTextField();
-
-            Object[] inputs = {
-                    "Identificador da Entidade:", txtId,
-                    "Valor:", txtValor
-            };
-
-            if (JOptionPane.showConfirmDialog(null, inputs, "Operação Saldo", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    long id = Long.parseLong(txtId.getText());
-                    double valor = Double.parseDouble(txtValor.getText());
-                    EntidadeOperadora entidade = mediatorEntidade.buscar((int) id);
-
-                    if (entidade != null) {
-                        if (isAcao) {
-                            if (isCredito) entidade.creditarSaldoAcao(valor);
-                            else entidade.debitarSaldoAcao(valor);
-                        } else {
-                            if (isCredito) entidade.creditarSaldoTituloDivida(valor);
-                            else entidade.debitarSaldoTituloDivida(valor);
-                        }
-                        JOptionPane.showMessageDialog(null, "Operação realizada com sucesso!");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Entidade não encontrada.");
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
-                }
-            }
-        }
     public static void mostrarMenuTituloDivida() {
-            JFrame frame = new JFrame("Menu Título Dívida");
-            frame.setSize(400, 300);
-            frame.setLayout(new GridLayout(7, 1));
+        JFrame frame = new JFrame("Menu Título Dívida");
+        frame.setSize(400, 300);
+        frame.setLayout(new GridLayout(7, 1));
 
-            JButton btnIncluir = new JButton("Incluir Título");
-            JButton btnAlterar = new JButton("Alterar Título");
-            JButton btnExcluir = new JButton("Excluir Título");
-            JButton btnBuscar = new JButton("Buscar Título");
-            JButton btnPrecoTransacao = new JButton("Visualizar Preço da Transação");
-            JButton btnAjustarTaxaJuros = new JButton("Ajustar Taxa de Juros");
-            JButton btnConsultarTaxaJuros = new JButton("Consultar Taxa de Juros");
+        JButton btnIncluir = new JButton("Incluir Título");
+        JButton btnAlterar = new JButton("Alterar Título");
+        JButton btnExcluir = new JButton("Excluir Título");
+        JButton btnBuscar = new JButton("Buscar Título");
+        JButton btnPrecoTransacao = new JButton("Visualizar Preço da Transação");
+        JButton btnAjustarTaxaJuros = new JButton("Ajustar Taxa de Juros");
+        JButton btnConsultarTaxaJuros = new JButton("Consultar Taxa de Juros");
 
-            btnIncluir.addActionListener(e -> incluirTitulo());
-            btnAlterar.addActionListener(e -> alterarTitulo());
-            btnExcluir.addActionListener(e -> excluirTitulo());
-            btnBuscar.addActionListener(e -> buscarTitulo());
-            btnPrecoTransacao.addActionListener(e -> precoTransacao());
-            btnAjustarTaxaJuros.addActionListener(e -> ajustarTaxaJuros());
-            btnConsultarTaxaJuros.addActionListener(e -> consultarTaxaJuros());
+        btnIncluir.addActionListener(e -> incluirTitulo());
+        btnAlterar.addActionListener(e -> alterarTitulo());
+        btnExcluir.addActionListener(e -> excluirTitulo());
+        btnBuscar.addActionListener(e -> buscarTitulo());
+        btnPrecoTransacao.addActionListener(e -> precoTransacao());
+        btnAjustarTaxaJuros.addActionListener(e -> ajustarTaxaJuros());
+        btnConsultarTaxaJuros.addActionListener(e -> consultarTaxaJuros());
 
-            frame.add(btnIncluir);
-            frame.add(btnAlterar);
-            frame.add(btnExcluir);
-            frame.add(btnBuscar);
-            frame.add(btnPrecoTransacao);
-            frame.add(btnAjustarTaxaJuros);
-            frame.add(btnConsultarTaxaJuros);
+        frame.add(btnIncluir);
+        frame.add(btnAlterar);
+        frame.add(btnExcluir);
+        frame.add(btnBuscar);
+        frame.add(btnPrecoTransacao);
+        frame.add(btnAjustarTaxaJuros);
+        frame.add(btnConsultarTaxaJuros);
 
-            frame.setVisible(true);
-        }
+        frame.setVisible(true);
+    }
 
-        private static void incluirTitulo() {
-            JTextField txtId = new JTextField();
-            JTextField txtNome = new JTextField();
-            JTextField txtData = new JTextField("yyyy-MM-dd");
-            JTextField txtTaxaJuros = new JTextField();
+    private static void incluirTitulo() {
+        JTextField txtId = new JTextField();
+        JTextField txtNome = new JTextField();
+        JTextField txtData = new JTextField("yyyy-MM-dd");
+        JTextField txtTaxaJuros = new JTextField();
 
-            Object[] inputs = {
-                    "Identificador (1-99999):", txtId,
-                    "Nome (10-100 caracteres):", txtNome,
-                    "Data de Validade:", txtData,
-                    "Taxa de Juros:", txtTaxaJuros
-            };
+        Object[] inputs = {
+                "Identificador (1-99999):", txtId,
+                "Nome (10-100 caracteres):", txtNome,
+                "Data de Validade:", txtData,
+                "Taxa de Juros:", txtTaxaJuros
+        };
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Incluir Título", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    int id = Integer.parseInt(txtId.getText());
-                    String nome = txtNome.getText();
-                    LocalDate data = LocalDate.parse(txtData.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    double taxaJuros = Double.parseDouble(txtTaxaJuros.getText());
+        if (JOptionPane.showConfirmDialog(null, inputs, "Incluir Título", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                int id = Integer.parseInt(txtId.getText());
+                String nome = txtNome.getText();
+                LocalDate data = LocalDate.parse(txtData.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                double taxaJuros = Double.parseDouble(txtTaxaJuros.getText());
 
-                    TituloDivida titulo = new TituloDivida(id, nome, data, taxaJuros);
-                    String mensagem = mediatorTituloDivida.incluir(titulo);
+                TituloDivida titulo = new TituloDivida(id, nome, data, taxaJuros);
+                String mensagem = mediatorTituloDivida.incluir(titulo);
 
-                    JOptionPane.showMessageDialog(null, mensagem == null ? "Título incluído com sucesso!" : mensagem);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
-                }
+                JOptionPane.showMessageDialog(null, mensagem == null ? "Título incluído com sucesso!" : mensagem);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
-        private static void alterarTitulo() {
-            JTextField txtId = new JTextField();
-            JTextField txtNome = new JTextField();
-            JTextField txtData = new JTextField("yyyy-MM-dd");
-            JTextField txtTaxaJuros = new JTextField();
+    private static void alterarTitulo() {
+        JTextField txtId = new JTextField();
+        JTextField txtNome = new JTextField();
+        JTextField txtData = new JTextField("yyyy-MM-dd");
+        JTextField txtTaxaJuros = new JTextField();
 
-            Object[] inputs = {
-                    "Identificador do Título:", txtId,
-                    "Novo Nome:", txtNome,
-                    "Nova Data de Validade:", txtData,
-                    "Nova Taxa de Juros:", txtTaxaJuros
-            };
+        Object[] inputs = {
+                "Identificador do Título:", txtId,
+                "Novo Nome:", txtNome,
+                "Nova Data de Validade:", txtData,
+                "Nova Taxa de Juros:", txtTaxaJuros
+        };
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Alterar Título", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    int id = Integer.parseInt(txtId.getText());
-                    String nome = txtNome.getText();
-                    LocalDate data = LocalDate.parse(txtData.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    double taxaJuros = Double.parseDouble(txtTaxaJuros.getText());
+        if (JOptionPane.showConfirmDialog(null, inputs, "Alterar Título", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                int id = Integer.parseInt(txtId.getText());
+                String nome = txtNome.getText();
+                LocalDate data = LocalDate.parse(txtData.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                double taxaJuros = Double.parseDouble(txtTaxaJuros.getText());
 
-                    TituloDivida titulo = new TituloDivida(id, nome, data, taxaJuros);
-                    String mensagem = mediatorTituloDivida.alterar(titulo);
+                TituloDivida titulo = new TituloDivida(id, nome, data, taxaJuros);
+                String mensagem = mediatorTituloDivida.alterar(titulo);
 
-                    JOptionPane.showMessageDialog(null, mensagem == null ? "Título alterado com sucesso!" : mensagem);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
-                }
+                JOptionPane.showMessageDialog(null, mensagem == null ? "Título alterado com sucesso!" : mensagem);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
-        private static void excluirTitulo() {
-            JTextField txtId = new JTextField();
-            Object[] inputs = {"Identificador do Título:", txtId};
+    private static void excluirTitulo() {
+        JTextField txtId = new JTextField();
+        Object[] inputs = {"Identificador do Título:", txtId};
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Excluir Título", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    int id = Integer.parseInt(txtId.getText());
-                    String mensagem = mediatorTituloDivida.excluir(id);
+        if (JOptionPane.showConfirmDialog(null, inputs, "Excluir Título", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                int id = Integer.parseInt(txtId.getText());
+                String mensagem = mediatorTituloDivida.excluir(id);
 
-                    JOptionPane.showMessageDialog(null, mensagem == null ? "Título excluído com sucesso!" : mensagem);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
-                }
+                JOptionPane.showMessageDialog(null, mensagem == null ? "Título excluído com sucesso!" : mensagem);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
-        private static void buscarTitulo() {
-            JTextField txtId = new JTextField();
-            Object[] inputs = {"Identificador do Título:", txtId};
+    private static void buscarTitulo() {
+        JTextField txtId = new JTextField();
+        Object[] inputs = {"Identificador do Título:", txtId};
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Buscar Título", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    int id = Integer.parseInt(txtId.getText());
-                    TituloDivida titulo = mediatorTituloDivida.buscar(id);
+        if (JOptionPane.showConfirmDialog(null, inputs, "Buscar Título", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                int id = Integer.parseInt(txtId.getText());
+                TituloDivida titulo = mediatorTituloDivida.buscar(id);
 
-                    if (titulo != null) {
-                        JOptionPane.showMessageDialog(null, String.format(
-                                "Título Encontrado:\nID: %d\nNome: %s\nData: %s\nTaxa de Juros: %.2f",
-                                titulo.getIdentificador(), titulo.getNome(), titulo.getDataDeValidade(), titulo.getTaxaJuros()
-                        ));
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Título não encontrado.");
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
+                if (titulo != null) {
+                    JOptionPane.showMessageDialog(null, String.format(
+                            "Título Encontrado:\nID: %d\nNome: %s\nData: %s\nTaxa de Juros: %.2f",
+                            titulo.getIdentificador(), titulo.getNome(), titulo.getDataDeValidade(), titulo.getTaxaJuros()
+                    ));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Título não encontrado.");
                 }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
-        private static void precoTransacao() {
-            JTextField txtId = new JTextField();
-            JTextField txtMontante = new JTextField();
+    private static void precoTransacao() {
+        JTextField txtId = new JTextField();
+        JTextField txtMontante = new JTextField();
 
-            Object[] inputs = {
-                    "Identificador do Título:", txtId,
-                    "Montante:", txtMontante
-            };
+        Object[] inputs = {
+                "Identificador do Título:", txtId,
+                "Montante:", txtMontante
+        };
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Preço da Transação", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    int id = Integer.parseInt(txtId.getText());
-                    double montante = Double.parseDouble(txtMontante.getText());
+        if (JOptionPane.showConfirmDialog(null, inputs, "Preço da Transação", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                int id = Integer.parseInt(txtId.getText());
+                double montante = Double.parseDouble(txtMontante.getText());
 
-                    TituloDivida titulo = mediatorTituloDivida.buscar(id);
-                    if (titulo != null) {
-                        double preco = titulo.calcularPrecoTransacao(montante);
-                        JOptionPane.showMessageDialog(null, "Preço da Transação: " + preco);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Título não encontrado.");
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
+                TituloDivida titulo = mediatorTituloDivida.buscar(id);
+                if (titulo != null) {
+                    double preco = titulo.calcularPrecoTransacao(montante);
+                    JOptionPane.showMessageDialog(null, "Preço da Transação: " + preco);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Título não encontrado.");
                 }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
-        private static void ajustarTaxaJuros() {
-            JTextField txtId = new JTextField();
-            JTextField txtNovaTaxa = new JTextField();
+    private static void ajustarTaxaJuros() {
+        JTextField txtId = new JTextField();
+        JTextField txtNovaTaxa = new JTextField();
 
-            Object[] inputs = {
-                    "Identificador do Título:", txtId,
-                    "Nova Taxa de Juros (%):", txtNovaTaxa
-            };
+        Object[] inputs = {
+                "Identificador do Título:", txtId,
+                "Nova Taxa de Juros (%):", txtNovaTaxa
+        };
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Ajustar Taxa de Juros", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    int id = Integer.parseInt(txtId.getText());
-                    double novaTaxa = Double.parseDouble(txtNovaTaxa.getText());
+        if (JOptionPane.showConfirmDialog(null, inputs, "Ajustar Taxa de Juros", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                int id = Integer.parseInt(txtId.getText());
+                double novaTaxa = Double.parseDouble(txtNovaTaxa.getText());
 
-                    TituloDivida titulo = mediatorTituloDivida.buscar(id);
-                    if (titulo != null) {
-                        titulo.setTaxaJuros(novaTaxa);
-                        JOptionPane.showMessageDialog(null, "Taxa de juros ajustada com sucesso!");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Título não encontrado.");
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
+                TituloDivida titulo = mediatorTituloDivida.buscar(id);
+                if (titulo != null) {
+                    titulo.setTaxaJuros(novaTaxa);
+                    JOptionPane.showMessageDialog(null, "Taxa de juros ajustada com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Título não encontrado.");
                 }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
-        private static void consultarTaxaJuros() {
-            JTextField txtId = new JTextField();
-            Object[] inputs = {"Identificador do Título:", txtId};
+    private static void consultarTaxaJuros() {
+        JTextField txtId = new JTextField();
+        Object[] inputs = {"Identificador do Título:", txtId};
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Consultar Taxa de Juros", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    int id = Integer.parseInt(txtId.getText());
-                    TituloDivida titulo = mediatorTituloDivida.buscar(id);
+        if (JOptionPane.showConfirmDialog(null, inputs, "Consultar Taxa de Juros", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                int id = Integer.parseInt(txtId.getText());
+                TituloDivida titulo = mediatorTituloDivida.buscar(id);
 
-                    if (titulo != null) {
-                        JOptionPane.showMessageDialog(null, "Taxa de Juros Atual: " + titulo.getTaxaJuros() + "%");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Título não encontrado.");
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
+                if (titulo != null) {
+                    JOptionPane.showMessageDialog(null, "Taxa de Juros Atual: " + titulo.getTaxaJuros() + "%");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Título não encontrado.");
                 }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
-        private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/Transacao.txt";
+    private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/Transacao.txt";
 
-        public static void mostrarMenuTransacao() {
-            JFrame frame = new JFrame("Menu Transação");
-            frame.setSize(300, 150);
-            frame.setLayout(new GridLayout(2, 1));
+    public static void mostrarMenuTransacao() {
+        JFrame frame = new JFrame("Menu Transação");
+        frame.setSize(300, 150);
+        frame.setLayout(new GridLayout(2, 1));
 
-            JButton btnRealizarOperacao = new JButton("Realizar Operação");
-            JButton btnGerarExtrato = new JButton("Gerar Extrato");
+        JButton btnRealizarOperacao = new JButton("Realizar Operação");
+        JButton btnGerarExtrato = new JButton("Gerar Extrato");
 
-            btnRealizarOperacao.addActionListener(e -> realizarOperacao());
-            btnGerarExtrato.addActionListener(e -> gerarExtrato());
+        btnRealizarOperacao.addActionListener(e -> realizarOperacao());
+        btnGerarExtrato.addActionListener(e -> gerarExtrato());
 
-            frame.add(btnGerarExtrato);
+        frame.add(btnGerarExtrato);
 
 
-            frame.add(btnRealizarOperacao);
-            frame.add(btnGerarExtrato);
+        frame.add(btnRealizarOperacao);
+        frame.add(btnGerarExtrato);
 
-            frame.setVisible(true);
-        }
+        frame.setVisible(true);
+    }
 
-        private static void realizarOperacao() {
-            JTextField txtIdCredito = new JTextField();
-            JTextField txtIdDebito = new JTextField();
-            JCheckBox chkEhAcao = new JCheckBox("É uma operação de Ação?");
-            JTextField txtIdAcaoTitulo = new JTextField();
-            JTextField txtValorOperacao = new JTextField();
+    private static void realizarOperacao() {
+        JTextField txtIdCredito = new JTextField();
+        JTextField txtIdDebito = new JTextField();
+        JCheckBox chkEhAcao = new JCheckBox("É uma operação de Ação?");
+        JTextField txtIdAcaoTitulo = new JTextField();
+        JTextField txtValorOperacao = new JTextField();
 
-            Object[] inputs = {
-                    "ID Entidade Crédito:", txtIdCredito,
-                    "ID Entidade Débito:", txtIdDebito,
-                    chkEhAcao,
-                    "ID Ação ou Título:", txtIdAcaoTitulo,
-                    "Valor da Operação:", txtValorOperacao
-            };
+        Object[] inputs = {
+                "ID Entidade Crédito:", txtIdCredito,
+                "ID Entidade Débito:", txtIdDebito,
+                chkEhAcao,
+                "ID Ação ou Título:", txtIdAcaoTitulo,
+                "Valor da Operação:", txtValorOperacao
+        };
 
-            if (JOptionPane.showConfirmDialog(null, inputs, "Realizar Operação", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                try {
-                    int idCredito = Integer.parseInt(txtIdCredito.getText());
-                    int idDebito = Integer.parseInt(txtIdDebito.getText());
-                    boolean ehAcao = chkEhAcao.isSelected();
-                    int idAcaoOuTitulo = Integer.parseInt(txtIdAcaoTitulo.getText());
-                    double valorOperacao = Double.parseDouble(txtValorOperacao.getText());
+        if (JOptionPane.showConfirmDialog(null, inputs, "Realizar Operação", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            try {
+                int idCredito = Integer.parseInt(txtIdCredito.getText());
+                int idDebito = Integer.parseInt(txtIdDebito.getText());
+                boolean ehAcao = chkEhAcao.isSelected();
+                int idAcaoOuTitulo = Integer.parseInt(txtIdAcaoTitulo.getText());
+                double valorOperacao = Double.parseDouble(txtValorOperacao.getText());
 
-                    if (valorOperacao <= 0) {
-                        JOptionPane.showMessageDialog(null, "Valor inválido.");
-                        return;
-                    }
-
-                    String mensagem = mediatorOperacao.realizarOperacao(ehAcao, idCredito, idDebito, idAcaoOuTitulo, valorOperacao);
-
-                    JOptionPane.showMessageDialog(null, mensagem == null ? "Operação realizada com sucesso!" : "Erro: " + mensagem);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
+                if (valorOperacao <= 0) {
+                    JOptionPane.showMessageDialog(null, "Valor inválido.");
+                    return;
                 }
+
+                String mensagem = mediatorOperacao.realizarOperacao(ehAcao, idCredito, idDebito, idAcaoOuTitulo, valorOperacao);
+
+                JOptionPane.showMessageDialog(null, mensagem == null ? "Operação realizada com sucesso!" : "Erro: " + mensagem);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao processar os dados.");
             }
         }
+    }
 
     private static void gerarExtrato() {
         JTextField txtIdEntidade = new JTextField();
@@ -638,19 +634,27 @@ public class Programa {
 
         if (JOptionPane.showConfirmDialog(null, inputs, "Gerar Extrato", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
             try {
-                int idEntidade = Integer.parseInt(txtIdEntidade.getText());
+                String input = txtIdEntidade.getText().trim();
+                System.out.println("Valor digitado: '" + input + "'");
 
-                // Chama o método que busca as transações credoras
-                Transacao[] extratoCredor = mediatorOperacao.gerarExtratoCredor(idEntidade);
-
-                if (extratoCredor == null || extratoCredor.length == 0) {
-                    JOptionPane.showMessageDialog(null, "Nenhuma transação encontrada para essa entidade como credora.");
+                if (input.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor, insira um ID.");
                     return;
                 }
 
-                // Construindo o extrato em formato de texto
-                StringBuilder detalhesExtrato = new StringBuilder("Extrato de Transações (Credora):\n\n");
-                for (Transacao transacao : extratoCredor) {
+                int idEntidade = Integer.parseInt(input);
+
+                // Depuração: Imprimir o extrato retornado
+                Transacao[] extrato = mediatorOperacao.gerarExtrato(idEntidade);
+                System.out.println("Extrato retornado: " + (extrato != null ? extrato.length : "null"));
+
+                if (extrato == null || extrato.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Nenhuma transação encontrada para essa entidade.");
+                    return;
+                }
+
+                StringBuilder detalhesExtrato = new StringBuilder("Extrato de Transações:\n\n");
+                for (Transacao transacao : extrato) {
                     detalhesExtrato.append(String.format(
                             "Data: %s\nValor: %.2f\nEntidade Crédito: %s\nEntidade Débito: %s\n\n",
                             transacao.getDataHoraOperacao(),
@@ -660,12 +664,11 @@ public class Programa {
                     ));
                 }
 
-                // Exibe o extrato em um JTextArea com JScrollPane
                 JTextArea textArea = new JTextArea(detalhesExtrato.toString());
-                textArea.setEditable(false);  // Para evitar edição
+                textArea.setEditable(false);
                 JScrollPane scrollPane = new JScrollPane(textArea);
                 scrollPane.setPreferredSize(new Dimension(400, 300));
-                JOptionPane.showMessageDialog(null, scrollPane, "Extrato Credor", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, scrollPane, "Extrato", JOptionPane.INFORMATION_MESSAGE);
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "ID inválido. Por favor, insira um número válido.");

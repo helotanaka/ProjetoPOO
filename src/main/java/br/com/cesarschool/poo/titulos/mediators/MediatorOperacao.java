@@ -18,10 +18,8 @@ public class MediatorOperacao {
     private final MediatorEntidadeOperadora mediatorEntidadeOperadora = MediatorEntidadeOperadora.getInstance();
     private final RepositorioTransacao repositorioTransacao = new RepositorioTransacao();
 
-    // Construtor privado para garantir singleton
     private MediatorOperacao() {}
 
-    // Método para obter a instância única (singleton)
     public static synchronized MediatorOperacao getInstance() {
         if (instance == null) {
             instance = new MediatorOperacao();
@@ -99,21 +97,26 @@ public class MediatorOperacao {
         return null;
     }
 
-    public Transacao[] gerarExtratoCredor(int entidade) {
-        Transacao[] transacoesCredoras = repositorioTransacao.buscarPorEntidadeCredora(entidade);
+    public Transacao[] gerarExtrato(int entidade) {
+        Transacao[] credoras = repositorioTransacao.buscarPorEntidadeCredora(entidade);
+        Transacao[] devedoras = repositorioTransacao.buscarPorEntidadeDebito(entidade);
 
-        return transacoesCredoras;
+        // Verifique se ambos os arrays são nulos e trate como vazio.
+        if (credoras == null) credoras = new Transacao[0];
+        if (devedoras == null) devedoras = new Transacao[0];
+
+        return combineAndSort(credoras, devedoras);
     }
 
 
     private Transacao[] combineAndSort(Transacao[] credoras, Transacao[] devedoras) {
         Transacao[] result = new Transacao[credoras.length + devedoras.length];
+
         System.arraycopy(credoras, 0, result, 0, credoras.length);
         System.arraycopy(devedoras, 0, result, credoras.length, devedoras.length);
 
         Arrays.sort(result, (a, b) -> b.getDataHoraOperacao().compareTo(a.getDataHoraOperacao()));
         return result;
     }
-
 
 }
