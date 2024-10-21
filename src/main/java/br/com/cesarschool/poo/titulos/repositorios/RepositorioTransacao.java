@@ -46,6 +46,25 @@ public class RepositorioTransacao {
 		return transacoesEncontradas.toArray(new Transacao[0]);
 	}
 
+	public Transacao[] buscarPorEntidadeDevedora(int identificadorEntidadeDebito) {
+		List<Transacao> transacoesEncontradas = new ArrayList<>();
+
+		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
+			String linha;
+			while ((linha = leitor.readLine()) != null) {
+				Transacao transacao = converterStringParaTransacao(linha);
+				if (transacao.getEntidadeDebito().getIdentificador() == identificadorEntidadeDebito) {
+					transacoesEncontradas.add(transacao);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return transacoesEncontradas.toArray(new Transacao[0]);
+	}
+
+
 	private Transacao converterStringParaTransacao(String linha) {
 		String[] dados = linha.split(";");
 		DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("yyyy-MM-dd");

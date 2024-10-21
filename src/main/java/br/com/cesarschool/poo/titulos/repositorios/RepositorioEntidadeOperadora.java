@@ -113,11 +113,14 @@ public class RepositorioEntidadeOperadora {
                 String[] divisao = linha.split(";");
 
                 if (Long.parseLong(divisao[0]) == identificador) {
-                    return new EntidadeOperadora(
+                    EntidadeOperadora entidadeOperadora = new EntidadeOperadora(
                             identificador,
                             divisao[1],
                             Boolean.parseBoolean(divisao[2])
                     );
+                    entidadeOperadora.creditarSaldoAcao(Double.parseDouble(divisao[3]));
+                    entidadeOperadora.creditarSaldoTituloDivida(Double.parseDouble(divisao[4]));
+                    return entidadeOperadora;
                 }
             }
         } catch (IOException e) {
