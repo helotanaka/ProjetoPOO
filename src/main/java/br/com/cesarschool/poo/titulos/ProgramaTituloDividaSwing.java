@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class ProgramaTituloDividaSwing {
     private JFrame frame;
@@ -24,7 +25,7 @@ public class ProgramaTituloDividaSwing {
     private void prepareGUI() {
         frame = new JFrame("Gerenciamento de Títulos de Dívida");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 500);
+        frame.setSize(1000, 500);
         frame.setLayout(new BorderLayout(5, 5));
 
         JPanel panel = new JPanel(new GridBagLayout());
@@ -80,11 +81,11 @@ public class ProgramaTituloDividaSwing {
         buscarButton.addActionListener(this::handleBuscar);
         panel.add(buscarButton, gbc);
 
-        calcularPrecoButton = new JButton("Calcular Preço");
+        calcularPrecoButton = new JButton("Calcular Preço pós transação");
         calcularPrecoButton.addActionListener(this::handleCalcularPreco);
         panel.add(calcularPrecoButton, gbc);
 
-        ajustarTaxaButton = new JButton("Ajustar Taxa");
+        ajustarTaxaButton = new JButton("Alterar Taxa");
         ajustarTaxaButton.addActionListener(this::handleAjustarTaxa);
         panel.add(ajustarTaxaButton, gbc);
 
@@ -101,33 +102,136 @@ public class ProgramaTituloDividaSwing {
 
 
     private void handleIncluir(ActionEvent e) {
-        // Parse fields and call mediator.incluir(new TituloDivida(...))
-        // Display result in outputArea
+        try {
+            int identificador = Integer.parseInt(identificadorField.getText().trim());
+            String nome = nomeField.getText().trim();
+            LocalDate dataDeValidade = LocalDate.parse(dataValidadeField.getText().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            double taxaJuros = Double.parseDouble(taxaJurosField.getText().trim());
+
+            TituloDivida titulo = new TituloDivida(identificador, nome, dataDeValidade, taxaJuros);
+            String mensagem = mediator.incluir(titulo);
+
+            if (mensagem == null) {
+                outputArea.setText("Título de Dívida incluído com sucesso!");
+            } else {
+                outputArea.setText("Erro: " + mensagem);
+            }
+        } catch (NumberFormatException ex) {
+            outputArea.setText("Erro de formatação: Por favor, verifique os dados numéricos.");
+        } catch (DateTimeParseException ex) {
+            outputArea.setText("Erro de formatação de data: Por favor, use o formato correto (yyyy-MM-dd).");
+        } catch (Exception ex) {
+            outputArea.setText("Erro ao incluir título: " + ex.getMessage());
+        }
     }
 
     private void handleAlterar(ActionEvent e) {
-        // Similar to handleIncluir, but calls mediator.alterar
+        try {
+            int identificador = Integer.parseInt(identificadorField.getText().trim());
+            String nome = nomeField.getText().trim();
+            LocalDate dataDeValidade = LocalDate.parse(dataValidadeField.getText().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            double taxaJuros = Double.parseDouble(taxaJurosField.getText().trim());
+
+            TituloDivida titulo = new TituloDivida(identificador, nome, dataDeValidade, taxaJuros);
+            String mensagem = mediator.alterar(titulo);
+
+            if (mensagem == null) {
+                outputArea.setText("Título de Dívida atualizado com sucesso!");
+            } else {
+                outputArea.setText("Erro: " + mensagem);
+            }
+        } catch (NumberFormatException ex) {
+            outputArea.setText("Erro de formatação: Verifique os dados numéricos.");
+        } catch (DateTimeParseException ex) {
+            outputArea.setText("Erro de formatação de data: Use o formato correto (yyyy-MM-dd).");
+        } catch (Exception ex) {
+            outputArea.setText("Erro ao atualizar título: " + ex.getMessage());
+        }
     }
+
 
     private void handleExcluir(ActionEvent e) {
-        // Call mediator.excluir with ID from identificadorField
+        try {
+            int identificador = Integer.parseInt(identificadorField.getText().trim());
+            String mensagem = mediator.excluir(identificador);
+
+            if (mensagem == null) {
+                outputArea.setText("Título de Dívida excluído com sucesso!");
+            } else {
+                outputArea.setText("Erro: " + mensagem);
+            }
+        } catch (NumberFormatException ex) {
+            outputArea.setText("Erro: Identificador inválido.");
+        }
     }
 
+
     private void handleBuscar(ActionEvent e) {
-        // Call mediator.buscar and display the title or "not found"
+        try {
+            int identificador = Integer.parseInt(identificadorField.getText().trim());
+            TituloDivida titulo = mediator.buscar(identificador);
+
+            if (titulo != null) {
+                outputArea.setText("Encontrado: ID " + titulo.getIdentificador() + ", Nome: " + titulo.getNome() + ", Data: " + titulo.getDataDeValidade() + ", Juros: " + titulo.getTaxaJuros() + "%");
+            } else {
+                outputArea.setText("Título de Dívida não encontrado.");
+            }
+        } catch (NumberFormatException ex) {
+            outputArea.setText("Erro: Identificador inválido.");
+        }
     }
 
     private void handleCalcularPreco(ActionEvent e) {
-        // Use the calcularPrecoTransacao method from a TituloDivida instance
+        try {
+            int identificador = Integer.parseInt(identificadorField.getText().trim());
+            double montante = Double.parseDouble(montanteField.getText().trim());
+            TituloDivida titulo = mediator.buscar(identificador);
+
+            if (titulo != null) {
+                double precoTransacao = titulo.calcularPrecoTransacao(montante);
+                outputArea.setText("Preço após transação: " + precoTransacao);
+            } else {
+                outputArea.setText("Título de Dívida não encontrado.");
+            }
+        } catch (NumberFormatException ex) {
+            outputArea.setText("Erro: Verifique os valores inseridos.");
+        }
     }
+
 
     private void handleAjustarTaxa(ActionEvent e) {
-        // Fetch the title, adjust the interest rate, and display success/failure
+        try {
+            int identificador = Integer.parseInt(identificadorField.getText().trim());
+            double novaTaxa = Double.parseDouble(taxaJurosField.getText().trim());
+            TituloDivida titulo = mediator.buscar(identificador);
+
+            if (titulo != null) {
+                titulo.setTaxaJuros(novaTaxa);
+                outputArea.setText("Taxa de juros atualizada para: " + novaTaxa + "%");
+            } else {
+                outputArea.setText("Título de Dívida não encontrado.");
+            }
+        } catch (NumberFormatException ex) {
+            outputArea.setText("Erro: Verifique os valores inseridos.");
+        }
     }
 
+
     private void handleConsultarTaxa(ActionEvent e) {
-        // Fetch the title and display its current interest rate
+        try {
+            int identificador = Integer.parseInt(identificadorField.getText().trim());
+            TituloDivida titulo = mediator.buscar(identificador);
+
+            if (titulo != null) {
+                outputArea.setText("Taxa de juros atual: " + titulo.getTaxaJuros() + "%");
+            } else {
+                outputArea.setText("Título de Dívida não encontrado.");
+            }
+        } catch (NumberFormatException ex) {
+            outputArea.setText("Erro: Identificador inválido.");
+        }
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(ProgramaTituloDividaSwing::new);
