@@ -1,4 +1,4 @@
 120;wsedrftgyhuijkol;true;0.0;0.0
 131;aszxdcfvghbjnkmasdf;true;0.0;120.0
-101;Entidade Credito;true;110.0;50.0
-102;Entidade Debito;true;40.0;30.0
+101;Entidade Credito;true;130.0;50.0
+102;Entidade Debito;true;80.0;30.0

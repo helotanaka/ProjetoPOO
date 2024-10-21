@@ -64,7 +64,6 @@ public class RepositorioTransacao {
 		return transacoesEncontradas.toArray(new Transacao[0]);
 	}
 
-
 	private Transacao converterStringParaTransacao(String linha) {
 		String[] dados = linha.split(";");
 		DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("yyyy-MM-dd");

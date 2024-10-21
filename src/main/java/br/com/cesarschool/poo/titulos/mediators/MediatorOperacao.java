@@ -99,12 +99,12 @@ public class MediatorOperacao {
         return null;
     }
 
-    public Transacao[] gerarExtrato(int entidade) {
+    public Transacao[] gerarExtratoCredor(int entidade) {
         Transacao[] transacoesCredoras = repositorioTransacao.buscarPorEntidadeCredora(entidade);
-        Transacao[] transacoesDevedoras = repositorioTransacao.buscarPorEntidadeDevedora(entidade);
 
-        return combineAndSort(transacoesCredoras, transacoesDevedoras);
+        return transacoesCredoras;
     }
+
 
     private Transacao[] combineAndSort(Transacao[] credoras, Transacao[] devedoras) {
         Transacao[] result = new Transacao[credoras.length + devedoras.length];
@@ -114,4 +114,6 @@ public class MediatorOperacao {
         Arrays.sort(result, (a, b) -> b.getDataHoraOperacao().compareTo(a.getDataHoraOperacao()));
         return result;
     }
+
+
 }
