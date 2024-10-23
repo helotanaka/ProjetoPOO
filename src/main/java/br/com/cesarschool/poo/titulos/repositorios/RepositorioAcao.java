@@ -14,9 +14,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class RepositorioAcao {
-	// Caminho constante para o arquivo
-	private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/Acao.txt";
 
+	private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/Acao.txt";
 
 	public boolean incluir(Acao acao) {
 		if (procurarId(acao.getIdentificador())) {

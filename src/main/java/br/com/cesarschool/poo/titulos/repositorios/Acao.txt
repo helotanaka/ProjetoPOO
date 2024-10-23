@@ -1,5 +1,0 @@
-12345;Ação Teste;2025-06-30;15.87
-1;bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;2035-08-09;11.9
-200;testeeeeee;2029-12-12;15.0
-1903;hfvkhqfvekwfyk;2026-12-12;15.0
-2319;sakfbkadbkfbw;2029-12-12;13.0

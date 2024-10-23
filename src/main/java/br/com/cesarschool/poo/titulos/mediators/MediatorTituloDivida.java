@@ -61,7 +61,6 @@ public class MediatorTituloDivida {
     private static MediatorTituloDivida instance;
     private RepositorioTituloDivida repositorioTituloDivida = new RepositorioTituloDivida();
 
-    // Construtor privado para garantir o padrão Singleton
     private MediatorTituloDivida() {}
 
     // Método público estático para acessar a instância única

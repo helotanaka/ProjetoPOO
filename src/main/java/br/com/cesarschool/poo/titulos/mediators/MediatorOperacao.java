@@ -5,7 +5,6 @@ import br.com.cesarschool.poo.titulos.entidades.EntidadeOperadora;
 import br.com.cesarschool.poo.titulos.entidades.TituloDivida;
 import br.com.cesarschool.poo.titulos.entidades.Transacao;
 import br.com.cesarschool.poo.titulos.repositorios.RepositorioTransacao;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 

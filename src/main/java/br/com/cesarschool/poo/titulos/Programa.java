@@ -354,6 +354,7 @@ public class Programa {
                         if (isCredito) entidade.creditarSaldoTituloDivida(valor);
                         else entidade.debitarSaldoTituloDivida(valor);
                     }
+                    mediatorEntidade.alterar(entidade);
                     JOptionPane.showMessageDialog(null, "Operação realizada com sucesso!");
                 } else {
                     JOptionPane.showMessageDialog(null, "Entidade não encontrada.");
