@@ -2,6 +2,7 @@ package br.com.cesarschool.poo.titulos.repositorios;
 
 import br.com.cesarschool.poo.titulos.entidades.EntidadeOperadora;
 import br.com.cesarschool.poo.titulos.entidades.Transacao;
+import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,10 @@ public class RepositorioEntidadeOperadora extends RepositorioGeral {
     @Override
     public Class<?> getClasseEntidade() {
         return Transacao.class;
+    }
+
+    public DAOSerializadorObjetos getDao() {
+        return dao;
     }
 
 

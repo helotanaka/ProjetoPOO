@@ -1,6 +1,8 @@
 package br.com.cesarschool.poo.titulos.repositorios;
 
 import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
+import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
+import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
 
 public abstract class RepositorioGeral {
 
@@ -15,4 +17,10 @@ public abstract class RepositorioGeral {
 
     // Método abstrato a ser implementado pelos repositórios específicos
     public abstract Class<?> getClasseEntidade();
+
+    public DAOSerializadorObjetos getDao() {
+        return dao;
+    }
+
+
 }

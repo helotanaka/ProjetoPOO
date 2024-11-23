@@ -2,6 +2,7 @@ package br.com.cesarschool.poo.titulos.repositorios;
 
 import br.com.cesarschool.poo.titulos.entidades.Acao;
 import br.com.cesarschool.poo.titulos.entidades.Transacao;
+import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,10 @@ public class RepositorioAcao extends RepositorioGeral{
 	@Override
 	public Class<?> getClasseEntidade() {
 		return Transacao.class;
+	}
+
+	public DAOSerializadorObjetos getDao() {
+		return dao;
 	}
 
 	private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/Acao.txt";

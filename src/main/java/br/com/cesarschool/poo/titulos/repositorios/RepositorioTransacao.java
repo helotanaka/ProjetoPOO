@@ -11,10 +11,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
 
 public class RepositorioTransacao extends RepositorioGeral{
 
 	private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/Transacao.txt";
+
+	public DAOSerializadorObjetos getDao() {
+		return dao;
+	}
 
 
 	public void incluir(Transacao transacao) {

@@ -9,11 +9,15 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
 
 public class RepositorioTituloDivida extends RepositorioGeral {
 
 	private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/TituloDivida.txt";
 
+	public DAOSerializadorObjetos getDao() {
+		return dao;
+	}
 	@Override
 	public Class<?> getClasseEntidade() {
 		return Transacao.class;
