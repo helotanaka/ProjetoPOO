@@ -4,6 +4,7 @@ import br.com.cesarschool.poo.titulos.entidades.Acao;
 import br.com.cesarschool.poo.titulos.entidades.EntidadeOperadora;
 import br.com.cesarschool.poo.titulos.entidades.TituloDivida;
 import br.com.cesarschool.poo.titulos.entidades.Transacao;
+import br.com.cesarschool.poo.titulos.repositorios.RepositorioGeral;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepositorioTransacao {
+public class RepositorioTransacao extends RepositorioGeral{
 
 	private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/Transacao.txt";
 
@@ -121,5 +122,10 @@ public class RepositorioTransacao {
 		return String.format("%d;%s;%b;%.2f;%.2f",
 				entidade.getIdentificador(), entidade.getNome(),
 				entidade.getAutorizacaoAcao(), entidade.getSaldoAcao(), entidade.getSaldoTituloDivida());
+	}
+
+	@Override
+	public Class<?> getClasseEntidade() {
+		return Transacao.class;
 	}
 }

@@ -1,6 +1,8 @@
 package br.com.cesarschool.poo.titulos.repositorios;
 
 import br.com.cesarschool.poo.titulos.entidades.EntidadeOperadora;
+import br.com.cesarschool.poo.titulos.entidades.Transacao;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.io.BufferedReader;
@@ -9,7 +11,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class RepositorioEntidadeOperadora {
+public class RepositorioEntidadeOperadora extends RepositorioGeral {
+
+    @Override
+    public Class<?> getClasseEntidade() {
+        return Transacao.class;
+    }
+
 
     private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/EntidadeOperadora.txt";
 

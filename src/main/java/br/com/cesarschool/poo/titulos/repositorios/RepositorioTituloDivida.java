@@ -1,6 +1,8 @@
 package br.com.cesarschool.poo.titulos.repositorios;
 
 import br.com.cesarschool.poo.titulos.entidades.TituloDivida;
+import br.com.cesarschool.poo.titulos.entidades.Transacao;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -8,10 +10,14 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepositorioTituloDivida {
+public class RepositorioTituloDivida extends RepositorioGeral {
 
 	private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/TituloDivida.txt";
 
+	@Override
+	public Class<?> getClasseEntidade() {
+		return Transacao.class;
+	}
 
 	public boolean incluir(TituloDivida tituloDivida) {
 

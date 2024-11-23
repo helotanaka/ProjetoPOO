@@ -17,7 +17,7 @@ public class TesteRepositorioAcao extends TesteGeral {
 	
 	@Test
 	public void testDAO00() {
-		Assertions.assertTrue(DAO instanceof RepositorioGeral);
+		Assertions.assertTrue(DAO instanceof RepositorioGeral); // is this an intance of repositoriogeral?
 		DAOSerializadorObjetos dao = DAO.getDao();
 		Assertions.assertNotNull(dao);
 	}
