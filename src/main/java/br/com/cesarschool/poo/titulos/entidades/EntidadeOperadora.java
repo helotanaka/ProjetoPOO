@@ -1,22 +1,18 @@
 package br.com.cesarschool.poo.titulos.entidades;
 
-public class EntidadeOperadora {
+import br.gov.cesarschool.poo.daogenerico.Entidade;
+
+public class EntidadeOperadora extends Entidade {
     private long identificador;
     private String nome;
     private boolean autorizacaoAcao;
     private double saldoAcao;
     private double saldoTituloDivida;
 
-    public EntidadeOperadora(long identificador, String nome, boolean autorizacaoAcao){
+    public EntidadeOperadora(long identificador, String nome, boolean autorizacaoAcao) {
         this.identificador = identificador;
         this.nome = nome;
         this.autorizacaoAcao = autorizacaoAcao;
-    }
-
-    public EntidadeOperadora(long identificador, String nome, double autorizadoAcao) {
-        super();
-        this.identificador = identificador;
-        this.nome = nome;
     }
 
     public long getIdentificador() {
@@ -51,19 +47,24 @@ public class EntidadeOperadora {
         return saldoTituloDivida;
     }
 
-    public void creditarSaldoAcao(double valor){
+    public void creditarSaldoAcao(double valor) {
         saldoAcao += valor;
     }
 
-    public void debitarSaldoAcao(double valor){
+    public void debitarSaldoAcao(double valor) {
         saldoAcao -= valor;
     }
 
-    public void creditarSaldoTituloDivida(double valor){
+    public void creditarSaldoTituloDivida(double valor) {
         saldoTituloDivida += valor;
     }
 
-    public void debitarSaldoTituloDivida(double valor){
+    public void debitarSaldoTituloDivida(double valor) {
         saldoTituloDivida -= valor;
+    }
+
+    @Override
+    public String getIdUnico() {
+        return String.valueOf(identificador);
     }
 }

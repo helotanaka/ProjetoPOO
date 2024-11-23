@@ -1,14 +1,16 @@
 package br.com.cesarschool.poo.titulos.entidades;
 
 import java.time.LocalDateTime;
+import br.gov.cesarschool.poo.daogenerico.Entidade;
+import java.time.format.DateTimeFormatter;
 
-public class Transacao {
+public class Transacao extends Entidade {
     private EntidadeOperadora entidadeCredito;
     private EntidadeOperadora entidadeDebito;
     private Acao acao;
     private TituloDivida tituloDivida;
     private double valorOperacao;
-    private LocalDateTime dataHoraOperacao; // nice
+    private LocalDateTime dataHoraOperacao;
 
     public Transacao(EntidadeOperadora entidadeCredito, EntidadeOperadora entidadeDebito, Acao acao,
                      TituloDivida tituloDivida, double valorOperacao, LocalDateTime dataHoraOperacao) {
@@ -24,47 +26,31 @@ public class Transacao {
         return entidadeCredito;
     }
 
-    private void setEntidadeCredito(EntidadeOperadora entidadeCredito) {
-        this.entidadeCredito = entidadeCredito;
-    }
-
     public EntidadeOperadora getEntidadeDebito() {
         return entidadeDebito;
-    }
-
-    private void setEntidadeDebito(EntidadeOperadora entidadeDebito) {
-        this.entidadeDebito = entidadeDebito;
     }
 
     public Acao getAcao() {
         return acao;
     }
 
-    private void setAcao(Acao acao) {
-        this.acao = acao;
-    }
-
     public TituloDivida getTituloDivida() {
         return tituloDivida;
-    }
-
-    private void setTituloDivida(TituloDivida tituloDivida) {
-        this.tituloDivida = tituloDivida;
     }
 
     public double getValorOperacao() {
         return valorOperacao;
     }
 
-    private void setValorOperacao(double valorOperacao) {
-        this.valorOperacao = valorOperacao;
-    }
-
     public LocalDateTime getDataHoraOperacao() {
         return dataHoraOperacao;
     }
 
-    private void setDataHoraOperacao(LocalDateTime dataHoraOperacao) {
-        this.dataHoraOperacao = dataHoraOperacao;
+    @Override
+    public String getIdUnico() {
+        String idAcaoOuTitulo = (acao != null) ? acao.getIdUnico() : tituloDivida.getIdUnico();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String dataHoraFormatada = dataHoraOperacao.format(formatter);
+        return entidadeCredito.getIdUnico() + "_" + entidadeDebito.getIdUnico() + "_" + idAcaoOuTitulo + "_" + dataHoraFormatada;
     }
 }
