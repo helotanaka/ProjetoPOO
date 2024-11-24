@@ -1,4 +1,3 @@
-//OKAY
 package br.gov.cesarschool.poo.testes;
 
 import java.io.File;
@@ -21,11 +20,12 @@ public class TesteRepositorioTransacao extends TesteGeral {
 	private static final String NOME_DIR_TRANSACAO = PONTO + SEP_ARQUIVO + Transacao.class.getSimpleName();
 	
 	@Test
-	public void testDAO00() {
+	public void testDAO00() { //foi
 		Assertions.assertTrue(DAO instanceof RepositorioGeral);
 		DAOSerializadorObjetos dao = DAO.getDao();
 		Assertions.assertNotNull(dao);
 	}
+
 	@Test
 	public void testDAO01() {
 		excluirArquivosDiretorio(NOME_DIR_TRANSACAO);

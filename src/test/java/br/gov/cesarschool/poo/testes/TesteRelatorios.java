@@ -1,4 +1,3 @@
-//OKAY
 package br.gov.cesarschool.poo.testes;
 
 import java.time.LocalDate;

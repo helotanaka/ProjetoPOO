@@ -16,7 +16,7 @@ public class RepositorioEntidadeOperadora extends RepositorioGeral {
 
     @Override
     public Class<?> getClasseEntidade() {
-        return Transacao.class;
+        return EntidadeOperadora.class;
     }
 
     public DAOSerializadorObjetos getDao() {

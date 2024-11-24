@@ -20,7 +20,7 @@ public class RepositorioTituloDivida extends RepositorioGeral {
 	}
 	@Override
 	public Class<?> getClasseEntidade() {
-		return Transacao.class;
+		return TituloDivida.class;
 	}
 
 	public boolean incluir(TituloDivida tituloDivida) {

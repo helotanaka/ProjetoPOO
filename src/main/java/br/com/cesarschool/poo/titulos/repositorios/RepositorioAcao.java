@@ -20,7 +20,7 @@ public class RepositorioAcao extends RepositorioGeral{
 
 	@Override
 	public Class<?> getClasseEntidade() {
-		return Transacao.class;
+		return Acao.class;
 	}
 
 	public DAOSerializadorObjetos getDao() {
