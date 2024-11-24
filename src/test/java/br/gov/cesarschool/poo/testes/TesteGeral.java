@@ -32,7 +32,8 @@ public class TesteGeral {
 		return obterNomeArquivo(NOME_DIR, ent);
 	}
 	protected String obterNomeArquivo(String dir, Entidade ent) {
-		return dir + SEP_ARQUIVO + ent.getIdUnico();
+		String teste = dir + SEP_ARQUIVO + ent.getIdUnico();
+		return teste;
 	}
 
 }

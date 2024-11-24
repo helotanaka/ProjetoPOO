@@ -26,7 +26,7 @@ public class TesteRepositorioTransacao extends TesteGeral {
 		Assertions.assertNotNull(dao);
 	}
 
-	@Test
+	@Test //foi
 	public void testDAO01() {
 		excluirArquivosDiretorio(NOME_DIR_TRANSACAO);
 		Acao acao = new Acao(1, "A1", LocalDate.now(), 100.0);
@@ -37,7 +37,8 @@ public class TesteRepositorioTransacao extends TesteGeral {
 		Assertions.assertEquals(obterQtdArquivosDir(NOME_DIR_TRANSACAO), 1); 
 		Assertions.assertTrue(new File(obterNomeArquivo(NOME_DIR_TRANSACAO, tr)).exists());
 	}
-	@Test
+
+	@Test //foi
 	public void testDAO02() {
 		excluirArquivosDiretorio(NOME_DIR_TRANSACAO);
 		TituloDivida titulo = new TituloDivida(4, "T4", LocalDate.now(), 102.0);
