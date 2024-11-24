@@ -3,7 +3,14 @@ package br.gov.cesarschool.poo.testes;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+//this is what we'll be using to compare test answers
+//Serializar um objeto significa transformá-lo em uma sequência de bytes para que ele possa
+// ser armazenado
+// (em um arquivo, por exemplo) ou transmitido (pela rede, por exemplo).
 
+//Quando dois objetos são serializados, seus estados internos são convertidos em bytes.
+// Comparar os arrays de bytes resultantes é uma maneira de verificar se dois objetos têm
+// exatamente os mesmos atributos com os mesmos valores.
 public class ComparadoraObjetosSerial {
 	public static boolean compareObjectsSerial(Serializable s1, Serializable s2) {
 		ByteArrayOutputStream  bos1 = null;
