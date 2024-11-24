@@ -1,7 +1,6 @@
 package br.com.cesarschool.poo.titulos.repositorios;
 
 import br.com.cesarschool.poo.titulos.entidades.Acao;
-import br.com.cesarschool.poo.titulos.entidades.Transacao;
 import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
 
 import java.util.ArrayList;
@@ -16,7 +15,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class RepositorioAcao extends RepositorioGeral{
+public class RepositorioAcao extends RepositorioGeral {
+	private static final String BASE_DIRECTORY = "Acao/";
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	@Override
 	public Class<?> getClasseEntidade() {
@@ -27,133 +28,90 @@ public class RepositorioAcao extends RepositorioGeral{
 		return dao;
 	}
 
-	//private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/Acao.txt";
-	//private static final String CAMINHO_ARQUIVO = "Acao.txt"; // Diretório para armazenar arquivos
-	private static final String CAMINHO_ARQUIVO = "Acao.txt";
+	private String getFilePath(int identificador) {
+		return BASE_DIRECTORY + identificador + ".txt";
+	}
 
 	public boolean incluir(Acao acao) {
-		if (procurarId(acao.getIdentificador())) {
-			return false; // Identificador já existe
+		String filePath = getFilePath(acao.getIdentificador());
+		if (procurarId(acao.getIdentificador(), filePath)) {
+			return false;
 		}
 
-		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO, true))) {
-			String frase = acao.getIdentificador() + ";" + acao.getNome() + ";" +
-					acao.getDataDeValidade() + ";" + acao.getValorUnitario();
-			escritor.write(frase);
+		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(filePath))) {
+			escritor.write(formatAcao(acao));
 			escritor.newLine();
 			return true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Error writing to file: " + e.getMessage());
+			return false;
 		}
-		return false;
 	}
 
 	public boolean alterar(Acao acao) {
-
+		String filePath = getFilePath(acao.getIdentificador());
 		List<String> linhas = new ArrayList<>();
 		boolean alterado = false;
 
-		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
+		try (BufferedReader leitor = new BufferedReader(new FileReader(filePath))) {
 			String linha;
 			while ((linha = leitor.readLine()) != null) {
 				String[] divisao = linha.split(";");
-
 				if (Integer.parseInt(divisao[0]) == acao.getIdentificador()) {
-					String novaLinha = acao.getIdentificador() + ";" + acao.getNome() + ";" +
-							acao.getDataDeValidade() + ";" + acao.getValorUnitario();
-					linhas.add(novaLinha);
+					linhas.add(formatAcao(acao));
 					alterado = true;
 				} else {
 					linhas.add(linha);
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Error reading from file: " + e.getMessage());
+			return false;
 		}
 
 		if (alterado) {
-			try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO))) {
-				for (String linha : linhas) {
-					escritor.write(linha);
-					escritor.newLine();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
+			return rewriteFile(linhas, filePath);
 		}
-
-		return alterado;
+		return false;
 	}
 
 	public boolean excluir(int identificador) {
-
-		List<String> linhas = new ArrayList<>();
-		boolean deletado = false;
-
-		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
-			String linha;
-			while ((linha = leitor.readLine()) != null) {
-				String[] divisao = linha.split(";");
-
-				if (Integer.parseInt(divisao[0]) == identificador) {
-					deletado = true;
-				} else {
-					linhas.add(linha);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if (deletado) {
-			try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO))) {
-				for (String linha : linhas) {
-					escritor.write(linha);
-					escritor.newLine();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
-
-		return deletado;
+		String filePath = getFilePath(identificador);
+		return new File(filePath).delete();
 	}
 
 	public Acao buscar(int identificador) {
-
-		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
-			String linha;
-			DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-			while ((linha = leitor.readLine()) != null) {
+		String filePath = getFilePath(identificador);
+		try (BufferedReader leitor = new BufferedReader(new FileReader(filePath))) {
+			String linha = leitor.readLine();
+			if (linha != null) {
 				String[] divisao = linha.split(";");
-
-				if (Integer.parseInt(divisao[0]) == identificador) {
-					LocalDate data = LocalDate.parse(divisao[2], formato);
-					return new Acao(identificador, divisao[1], data, Double.parseDouble(divisao[3]));
-				}
+				return new Acao(identificador, divisao[1], LocalDate.parse(divisao[2], formatter), Double.parseDouble(divisao[3]));
 			}
 		} catch (IOException | DateTimeParseException e) {
-			e.printStackTrace();
+			System.err.println("Error processing file for search: " + e.getMessage());
 		}
-
 		return null;
 	}
 
-	private boolean procurarId(int identificador) {
-		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
-			String linha;
-			while ((linha = leitor.readLine()) != null) {
-				String[] partes = linha.split(";");
-				if (Integer.parseInt(partes[0]) == identificador) {
-					return true;
-				}
+	private boolean procurarId(int identificador, String filePath) {
+		return new File(filePath).exists();
+	}
+
+	private String formatAcao(Acao acao) {
+		return acao.getIdentificador() + ";" + acao.getNome() + ";" + acao.getDataDeValidade().format(formatter) + ";" + acao.getValorUnitario();
+	}
+
+	private boolean rewriteFile(List<String> linhas, String filePath) {
+		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(filePath))) {
+			for (String linha : linhas) {
+				escritor.write(linha);
+				escritor.newLine();
 			}
+			return true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Error rewriting file: " + e.getMessage());
+			return false;
 		}
-		return false;
 	}
 }
