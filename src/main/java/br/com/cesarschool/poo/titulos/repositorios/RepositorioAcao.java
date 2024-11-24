@@ -27,7 +27,9 @@ public class RepositorioAcao extends RepositorioGeral{
 		return dao;
 	}
 
-	private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/Acao.txt";
+	//private static final String CAMINHO_ARQUIVO = "src/main/java/br/com/cesarschool/poo/titulos/repositorios/Acao.txt";
+	//private static final String CAMINHO_ARQUIVO = "Acao.txt"; // Diretório para armazenar arquivos
+	private static final String CAMINHO_ARQUIVO = "Acao.txt";
 
 	public boolean incluir(Acao acao) {
 		if (procurarId(acao.getIdentificador())) {
