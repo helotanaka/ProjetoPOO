@@ -7,17 +7,17 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
-
-import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
+import java.time.temporal.ChronoUnit;
 
 public class RepositorioTituloDivida extends RepositorioGeral {
 
-	private static final String CAMINHO_ARQUIVO = "TituloDivida";
+	private static final String CAMINHO_DIRETORIO = "TituloDivida";
 
-	public DAOSerializadorObjetos getDao() {
-		return dao;
+	public RepositorioTituloDivida() {
+		File diretorio = new File(CAMINHO_DIRETORIO);
+		if (!diretorio.exists()) {
+			diretorio.mkdirs();
+		}
 	}
 
 	@Override
@@ -30,12 +30,13 @@ public class RepositorioTituloDivida extends RepositorioGeral {
 			return false; // Identificador já existe
 		}
 
-		tituloDivida.setDataHoraInclusao(LocalDateTime.now()); // Define a data de inclusão
+		// Configura a data e hora de inclusão truncada para segundos
+		if (tituloDivida.getDataHoraInclusao() == null) {
+			tituloDivida.setDataHoraInclusao(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+		}
 
-		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO, true))) {
-			String linha = formatarTituloDivida(tituloDivida);
-			escritor.write(linha);
-			escritor.newLine();
+		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(getCaminhoArquivo(tituloDivida), false))) {
+			escritor.write(formatarTituloDivida(tituloDivida));
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -44,130 +45,106 @@ public class RepositorioTituloDivida extends RepositorioGeral {
 	}
 
 	public boolean alterar(TituloDivida tituloDivida) {
-		List<String> linhas = new ArrayList<>();
-		boolean alterado = false;
+		File arquivo = new File(getCaminhoArquivo(tituloDivida.getIdentificador()));
+		if (!arquivo.exists()) {
+			return false; // Não é possível alterar um registro inexistente
+		}
 
-		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
-			String linha;
-			while ((linha = leitor.readLine()) != null) {
-				TituloDivida existente = converterStringParaTituloDivida(linha);
+		// Preserva os dados originais antes da atualização
+		TituloDivida existente = buscar(tituloDivida.getIdentificador());
+		if (existente == null) {
+			return false;
+		}
 
-				if (existente.getIdentificador() == tituloDivida.getIdentificador()) {
-					tituloDivida.setDataHoraInclusao(existente.getDataHoraInclusao()); // Mantém a data de inclusão original
-					tituloDivida.setDataHoraUltimaAlteracao(LocalDateTime.now()); // Define a data da última alteração
-					linhas.add(formatarTituloDivida(tituloDivida));
-					alterado = true;
-				} else {
-					linhas.add(linha);
-				}
-			}
+		// Configura os campos adicionais necessários
+		tituloDivida.setDataHoraInclusao(existente.getDataHoraInclusao()); // Mantém a data de inclusão original
+		tituloDivida.setDataHoraUltimaAlteracao(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)); // Atualiza a última alteração
+
+		// Atualiza o arquivo
+		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(arquivo, false))) {
+			escritor.write(formatarTituloDivida(tituloDivida));
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
-
-		if (alterado) {
-			try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO))) {
-				for (String linha : linhas) {
-					escritor.write(linha);
-					escritor.newLine();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
-		return alterado;
 	}
 
 	public boolean excluir(int identificador) {
-		List<String> linhas = new ArrayList<>();
-		boolean deletado = false;
-
-		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
-			String linha;
-			while ((linha = leitor.readLine()) != null) {
-				TituloDivida existente = converterStringParaTituloDivida(linha);
-
-				if (existente.getIdentificador() == identificador) {
-					deletado = true;
-				} else {
-					linhas.add(linha);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if (deletado) {
-			try (BufferedWriter escritor = new BufferedWriter(new FileWriter(CAMINHO_ARQUIVO))) {
-				for (String linha : linhas) {
-					escritor.write(linha);
-					escritor.newLine();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
-		return deletado;
+		File arquivo = new File(getCaminhoArquivo(identificador));
+		return arquivo.delete();
 	}
 
 	public TituloDivida buscar(int identificador) {
-		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
-			String linha;
-			while ((linha = leitor.readLine()) != null) {
-				TituloDivida titulo = converterStringParaTituloDivida(linha);
-				if (titulo.getIdentificador() == identificador) {
-					return titulo;
-				}
+		File arquivo = new File(getCaminhoArquivo(identificador));
+		if (!arquivo.exists()) {
+			return null;
+		}
+
+		try (BufferedReader leitor = new BufferedReader(new FileReader(arquivo))) {
+			String linha = leitor.readLine();
+			if (linha != null) {
+				return converterStringParaTituloDivida(linha);
 			}
-		} catch (IOException | DateTimeParseException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
 	private boolean procurarId(int identificador) {
-		try (BufferedReader leitor = new BufferedReader(new FileReader(CAMINHO_ARQUIVO))) {
-			String linha;
-			while ((linha = leitor.readLine()) != null) {
-				TituloDivida titulo = converterStringParaTituloDivida(linha);
-				if (titulo.getIdentificador() == identificador) {
-					return true;
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
+		File arquivo = new File(getCaminhoArquivo(identificador));
+		return arquivo.exists();
+	}
+
+	private String getCaminhoArquivo(TituloDivida tituloDivida) {
+		return getCaminhoArquivo(tituloDivida.getIdentificador());
+	}
+
+	private String getCaminhoArquivo(int identificador) {
+		return CAMINHO_DIRETORIO + File.separator + identificador;
 	}
 
 	private String formatarTituloDivida(TituloDivida tituloDivida) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
 		return String.format("%d;%s;%s;%.2f;%s;%s",
 				tituloDivida.getIdentificador(),
 				tituloDivida.getNome(),
-				tituloDivida.getDataDeValidade(),
+				tituloDivida.getDataDeValidade().format(dateFormatter),
 				tituloDivida.getTaxaJuros(),
-				tituloDivida.getDataHoraInclusao() != null ? tituloDivida.getDataHoraInclusao().format(formatter) : "",
-				tituloDivida.getDataHoraUltimaAlteracao() != null ? tituloDivida.getDataHoraUltimaAlteracao().format(formatter) : "");
+				tituloDivida.getDataHoraInclusao().format(dateTimeFormatter),
+				tituloDivida.getDataHoraUltimaAlteracao() != null
+						? tituloDivida.getDataHoraUltimaAlteracao().format(dateTimeFormatter)
+						: "null"); // Garante que null seja registrado
 	}
 
 	private TituloDivida converterStringParaTituloDivida(String linha) {
 		String[] partes = linha.split(";");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
 		int identificador = Integer.parseInt(partes[0]);
 		String nome = partes[1];
-		LocalDate dataDeValidade = LocalDate.parse(partes[2]);
-		double taxaJuros = Double.parseDouble(partes[3]);
-		LocalDateTime dataHoraInclusao = partes[4].isEmpty() ? null : LocalDateTime.parse(partes[4], formatter);
-		LocalDateTime dataHoraUltimaAlteracao = partes[5].isEmpty() ? null : LocalDateTime.parse(partes[5], formatter);
+		LocalDate dataDeValidade = LocalDate.parse(partes[2], dateFormatter);
 
-		TituloDivida tituloDivida = new TituloDivida(identificador, nome, dataDeValidade, taxaJuros);
-		tituloDivida.setDataHoraInclusao(dataHoraInclusao);
-		tituloDivida.setDataHoraUltimaAlteracao(dataHoraUltimaAlteracao);
+		// Substituir vírgulas por pontos para evitar erro ao converter para Double
+		double taxaJuros = Double.parseDouble(partes[3].replace(",", "."));
 
-		return tituloDivida;
+		// Recupera a dataHoraInclusao truncada
+		LocalDateTime dataHoraInclusao = LocalDateTime.parse(partes[4], dateTimeFormatter).truncatedTo(ChronoUnit.SECONDS);
+
+		// Recupera a dataHoraUltimaAlteracao, se existir
+		LocalDateTime dataHoraUltimaAlteracao = partes[5].equals("null")
+				? null
+				: LocalDateTime.parse(partes[5], dateTimeFormatter).truncatedTo(ChronoUnit.SECONDS);
+
+		// Cria o objeto e define os campos adicionais
+		TituloDivida titulo = new TituloDivida(identificador, nome, dataDeValidade, taxaJuros);
+		titulo.setDataHoraInclusao(dataHoraInclusao);
+		titulo.setDataHoraUltimaAlteracao(dataHoraUltimaAlteracao);
+
+		return titulo;
 	}
 }
