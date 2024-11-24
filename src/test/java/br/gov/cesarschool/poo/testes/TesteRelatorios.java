@@ -1,3 +1,4 @@
+//OKAY
 package br.gov.cesarschool.poo.testes;
 
 import java.time.LocalDate;
@@ -123,13 +124,13 @@ public class TesteRelatorios extends TesteGeral {
 		Assertions.assertEquals(trans[2].getEntidadeCredito().getNome(), "BBB");		
 		Assertions.assertEquals(trans[3].getEntidadeCredito().getNome(), "AAA");
 	}
-	
-	static class ComparadorEntidadeModeloIdUnico implements Comparador {		
+
+	static class ComparadorEntidadeModeloIdUnico implements Comparador {
 		public int comparar(Comparavel c1, Comparavel c2) {
 			Entidade e1 = (Entidade)c1;
 			Entidade e2 = (Entidade)c2;
 			return e1.getIdUnico().compareTo(e2.getIdUnico());
-		}		
+
+		}
 	}
-	
 }

@@ -27,7 +27,7 @@ public class EntidadeModelo extends Entidade implements Comparavel {
 
 	public String getIdUnico() {
 		return "" + id;
-	}		
+	}
 
 	public String toString() {
 		return nome;
