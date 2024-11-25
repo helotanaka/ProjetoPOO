@@ -61,7 +61,8 @@ public class Transacao extends Entidade implements Comparavel {
     public int comparar(Comparavel c) {
         if (c instanceof Transacao) {
             Transacao outraTransacao = (Transacao) c;
-            return this.dataHoraOperacao.compareTo(outraTransacao.dataHoraOperacao);
+            //System.out.println("hi");
+            return (this.dataHoraOperacao.compareTo(outraTransacao.dataHoraOperacao)) * - 1;
         }
         throw new IllegalArgumentException("O objeto comparado deve ser uma instância de Transacao.");
     }

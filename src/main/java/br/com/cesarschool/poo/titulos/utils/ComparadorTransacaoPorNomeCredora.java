@@ -10,10 +10,11 @@ public class ComparadorTransacaoPorNomeCredora extends ComparadorPadrao implemen
             Transacao t1 = (Transacao) c1;
             Transacao t2 = (Transacao) c2;
 
-            String nomeCredora1 = t1.getEntidadeCredito() != null ? t1.getEntidadeCredito().getNome() : "";
-            String nomeCredora2 = t2.getEntidadeCredito() != null ? t2.getEntidadeCredito().getNome() : "";
+            String nomeCredora1 = t1.getEntidadeCredito() != null ? t1.getEntidadeCredito().getNome() : " ";
+            String nomeCredora2 = t2.getEntidadeCredito() != null ? t2.getEntidadeCredito().getNome() : " ";
 
             return nomeCredora1.compareToIgnoreCase(nomeCredora2);
+            //return t1.getEntidadeCredito().getNome().compareTo(t2.getEntidadeCredito().getNome());
         }
         throw new IllegalArgumentException("Os objetos devem ser instâncias de Transacao.");
     }
