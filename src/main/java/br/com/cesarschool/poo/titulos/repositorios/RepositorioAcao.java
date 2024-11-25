@@ -3,21 +3,25 @@ package br.com.cesarschool.poo.titulos.repositorios;
 import br.com.cesarschool.poo.titulos.entidades.Acao;
 import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
 
+import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public class RepositorioAcao extends RepositorioGeral {
 	private static final String BASE_DIRECTORY = "Acao/";
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+	public RepositorioAcao() {
+		File baseDir = new File(BASE_DIRECTORY);
+		if (!baseDir.exists()) {
+			baseDir.mkdirs(); // Cria o diretório se ele não existir
+		}
+	}
 
 	@Override
 	public Class<?> getClasseEntidade() {
@@ -29,13 +33,18 @@ public class RepositorioAcao extends RepositorioGeral {
 	}
 
 	private String getFilePath(int identificador) {
-		return BASE_DIRECTORY + identificador + ".txt";
+		return BASE_DIRECTORY + identificador; // Gera o caminho correto
 	}
 
 	public boolean incluir(Acao acao) {
 		String filePath = getFilePath(acao.getIdentificador());
+
 		if (procurarId(acao.getIdentificador(), filePath)) {
-			return false;
+			return false; // Identificador já existe
+		}
+
+		if (acao.getDataHoraInclusao() == null) {
+			acao.setDataHoraInclusao(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 		}
 
 		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(filePath))) {
@@ -58,6 +67,10 @@ public class RepositorioAcao extends RepositorioGeral {
 			while ((linha = leitor.readLine()) != null) {
 				String[] divisao = linha.split(";");
 				if (Integer.parseInt(divisao[0]) == acao.getIdentificador()) {
+					// Mantém a data de inclusão original e define a última alteração
+					Acao existente = parseAcao(linha);
+					acao.setDataHoraInclusao(existente.getDataHoraInclusao());
+					acao.setDataHoraUltimaAlteracao(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 					linhas.add(formatAcao(acao));
 					alterado = true;
 				} else {
@@ -85,13 +98,35 @@ public class RepositorioAcao extends RepositorioGeral {
 		try (BufferedReader leitor = new BufferedReader(new FileReader(filePath))) {
 			String linha = leitor.readLine();
 			if (linha != null) {
-				String[] divisao = linha.split(";");
-				return new Acao(identificador, divisao[1], LocalDate.parse(divisao[2], formatter), Double.parseDouble(divisao[3]));
+				return parseAcao(linha);
 			}
-		} catch (IOException | DateTimeParseException e) {
+		} catch (IOException e) {
 			System.err.println("Error processing file for search: " + e.getMessage());
 		}
 		return null;
+	}
+
+	private Acao parseAcao(String linha) {
+		String[] partes = linha.split(";");
+
+		int identificador = Integer.parseInt(partes[0]);
+		String nome = partes[1];
+		LocalDate dataDeValidade = LocalDate.parse(partes[2], formatter);
+		double valorUnitario = Double.parseDouble(partes[3].replace(",", "."));
+
+		// Trunca as datas ao carregar
+		LocalDateTime dataHoraInclusao = partes[4].equals("null")
+				? null
+				: LocalDateTime.parse(partes[4], dateTimeFormatter).truncatedTo(ChronoUnit.SECONDS);
+		LocalDateTime dataHoraUltimaAlteracao = partes[5].equals("null")
+				? null
+				: LocalDateTime.parse(partes[5], dateTimeFormatter).truncatedTo(ChronoUnit.SECONDS);
+
+		Acao acao = new Acao(identificador, nome, dataDeValidade, valorUnitario);
+		acao.setDataHoraInclusao(dataHoraInclusao);
+		acao.setDataHoraUltimaAlteracao(dataHoraUltimaAlteracao);
+
+		return acao;
 	}
 
 	private boolean procurarId(int identificador, String filePath) {
@@ -99,7 +134,9 @@ public class RepositorioAcao extends RepositorioGeral {
 	}
 
 	private String formatAcao(Acao acao) {
-		return acao.getIdentificador() + ";" + acao.getNome() + ";" + acao.getDataDeValidade().format(formatter) + ";" + acao.getValorUnitario();
+		return acao.getIdentificador() + ";" + acao.getNome() + ";" + acao.getDataDeValidade().format(formatter) + ";"
+				+ acao.getValorUnitario() + ";" + acao.getDataHoraInclusao().format(dateTimeFormatter) + ";"
+				+ (acao.getDataHoraUltimaAlteracao() != null ? acao.getDataHoraUltimaAlteracao().format(dateTimeFormatter) : "null");
 	}
 
 	private boolean rewriteFile(List<String> linhas, String filePath) {
