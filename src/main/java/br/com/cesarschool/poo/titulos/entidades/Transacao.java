@@ -51,7 +51,7 @@ public class Transacao extends Entidade implements Comparavel {
 
     @Override
     public String getIdUnico() {
-        String idAcaoOuTitulo = (acao != null) ? acao.getIdUnico() : tituloDivida.getIdUnico();
+        String idAcaoOuTitulo = (acao != null ? acao.getIdUnico() : (tituloDivida != null ? tituloDivida.getIdUnico() : ""));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String dataHoraFormatada = dataHoraOperacao.format(formatter);
         return entidadeCredito.getIdUnico() + "_" + entidadeDebito.getIdUnico() + "_" + idAcaoOuTitulo + "_" + dataHoraFormatada;

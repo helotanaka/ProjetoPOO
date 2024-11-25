@@ -15,7 +15,6 @@ public class ComparadorTransacaoPorNomeCredora extends ComparadorPadrao implemen
 
             return nomeCredora1.compareToIgnoreCase(nomeCredora2);
         }
-
         throw new IllegalArgumentException("Os objetos devem ser instâncias de Transacao.");
     }
 }
