@@ -4,15 +4,17 @@ import br.com.cesarschool.poo.titulos.entidades.Transacao;
 import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.cesarschool.poo.titulos.entidades.Transacao;
+import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
+
+import java.io.*;
+		import java.util.ArrayList;
+import java.util.List;
 
 public class RepositorioTransacao extends RepositorioGeral {
-
-	private static final String CAMINHO_ARQUIVO = "Transacao"; // Diretório para armazenar arquivos
-
-	@Override
-	public DAOSerializadorObjetos getDao() {
-		return dao;
-	}
 
 	public void incluir(Transacao transacao) {
 		// Garante que o diretório exista
@@ -32,7 +34,6 @@ public class RepositorioTransacao extends RepositorioGeral {
 		}
 	}
 
-	// Método para formatar a transação para salvar no arquivo
 	private String formatarTransacao(Transacao transacao) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Entidade Crédito: ").append(transacao.getEntidadeCredito().getNome()).append("\n");
@@ -42,16 +43,53 @@ public class RepositorioTransacao extends RepositorioGeral {
 		return sb.toString();
 	}
 
-	// Método para buscar transações por entidade de débito
-	public Transacao[] buscarPorEntidadeDebito(int identificadorEntidadeDebito) {
-		// Lógica para buscar transações associadas à entidade de débito
-		return new Transacao[0]; // Retorna vazio por enquanto (implementação futura)
+	private static final String CAMINHO_ARQUIVO = "Transacao";
+
+	@Override
+	public DAOSerializadorObjetos getDao() {
+		return dao;
 	}
 
-	// Método para buscar transações por entidade credora
+	// Method to fetch transactions where the specified ID matches the debit entity's ID
+	public Transacao[] buscarPorEntidadeDebito(int identificadorEntidadeDebito) {
+		File folder = new File(CAMINHO_ARQUIVO);
+		File[] listOfFiles = folder.listFiles();
+		List<Transacao> transactions = new ArrayList<>();
+		for (File file : listOfFiles) {
+			if (file.isFile()) {
+				Transacao transacao = readTransactionFromFile(file);
+				if (transacao != null && transacao.getEntidadeDebito().getIdentificador() == identificadorEntidadeDebito) {
+					transactions.add(transacao);
+				}
+			}
+		}
+		return transactions.toArray(new Transacao[0]);
+	}
+
+	// Method to fetch transactions where the specified ID matches the credit entity's ID
 	public Transacao[] buscarPorEntidadeCredora(int identificadorEntidadeCredito) {
-		// Lógica para buscar transações associadas à entidade credora
-		return new Transacao[0]; // Retorna vazio por enquanto (implementação futura)
+		File folder = new File(CAMINHO_ARQUIVO);
+		File[] listOfFiles = folder.listFiles();
+		List<Transacao> transactions = new ArrayList<>();
+		for (File file : listOfFiles) {
+			if (file.isFile()) {
+				Transacao transacao = readTransactionFromFile(file);
+				if (transacao != null && transacao.getEntidadeCredito().getIdentificador() == identificadorEntidadeCredito) {
+					transactions.add(transacao);
+				}
+			}
+		}
+		return transactions.toArray(new Transacao[0]);
+	}
+
+	// Helper method to deserialize a transaction from a file
+	private Transacao readTransactionFromFile(File file) {
+		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+			return (Transacao) ois.readObject();
+		} catch (Exception e) {
+			System.err.println("Error reading transaction from file: " + e.getMessage());
+			return null;
+		}
 	}
 
 	@Override
@@ -59,3 +97,4 @@ public class RepositorioTransacao extends RepositorioGeral {
 		return Transacao.class;
 	}
 }
+
