@@ -3,11 +3,12 @@ package br.com.cesarschool.poo.titulos.repositorios;
 import br.com.cesarschool.poo.titulos.entidades.Transacao;
 import br.gov.cesarschool.poo.daogenerico.DAOSerializadorObjetos;
 
-import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RepositorioTransacao extends RepositorioGeral {
 
-	private static final String CAMINHO_ARQUIVO = "Transacao"; // Diretório para armazenar arquivos
+	private static final String CAMINHO_ARQUIVO = "Transacao";
 
 	@Override
 	public DAOSerializadorObjetos getDao() {
@@ -15,43 +16,37 @@ public class RepositorioTransacao extends RepositorioGeral {
 	}
 
 	public void incluir(Transacao transacao) {
-		// Garante que o diretório exista
-		File diretorio = new File(CAMINHO_ARQUIVO);
-		if (!diretorio.exists()) {
-			diretorio.mkdirs(); // Cria o diretório se ele não existir
+		dao.incluir(transacao);
+	}
+
+	public Transacao[] buscarTodos() {
+		List<Transacao> transacoes = new ArrayList<>();
+		for (Object obj : dao.buscarTodos()) {
+			transacoes.add((Transacao) obj);
 		}
+		return transacoes.toArray(new Transacao[0]);
+	}
 
-		// Nome do arquivo baseado no ID único da transação
-		String caminhoArquivo = diretorio + File.separator + transacao.getIdUnico();
-
-		try (BufferedWriter escritor = new BufferedWriter(new FileWriter(caminhoArquivo))) {
-			String conteudo = formatarTransacao(transacao); // Formata a transação
-			escritor.write(conteudo);
-		} catch (IOException e) {
-			e.printStackTrace();
+	public Transacao[] buscarPorEntidadeDebito(long identificadorEntidadeDebito) {
+		List<Transacao> resultado = new ArrayList<>();
+		for (Object obj : dao.buscarTodos()) {
+			Transacao transacao = (Transacao) obj;
+			if (transacao.getEntidadeDebito().getIdentificador() == identificadorEntidadeDebito) {
+				resultado.add(transacao);
+			}
 		}
+		return resultado.toArray(new Transacao[0]);
 	}
 
-	// Método para formatar a transação para salvar no arquivo
-	private String formatarTransacao(Transacao transacao) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Entidade Crédito: ").append(transacao.getEntidadeCredito().getNome()).append("\n");
-		sb.append("Entidade Débito: ").append(transacao.getEntidadeDebito().getNome()).append("\n");
-		sb.append("Valor: ").append(transacao.getValorOperacao()).append("\n");
-		sb.append("Data e Hora: ").append(transacao.getDataHoraOperacao()).append("\n");
-		return sb.toString();
-	}
-
-	// Método para buscar transações por entidade de débito
-	public Transacao[] buscarPorEntidadeDebito(int identificadorEntidadeDebito) {
-		// Lógica para buscar transações associadas à entidade de débito
-		return new Transacao[0]; // Retorna vazio por enquanto (implementação futura)
-	}
-
-	// Método para buscar transações por entidade credora
-	public Transacao[] buscarPorEntidadeCredora(int identificadorEntidadeCredito) {
-		// Lógica para buscar transações associadas à entidade credora
-		return new Transacao[0]; // Retorna vazio por enquanto (implementação futura)
+	public Transacao[] buscarPorEntidadeCredora(long identificadorEntidadeCredito) {
+		List<Transacao> resultado = new ArrayList<>();
+		for (Object obj : dao.buscarTodos()) {
+			Transacao transacao = (Transacao) obj;
+			if (transacao.getEntidadeCredito().getIdentificador() == identificadorEntidadeCredito) {
+				resultado.add(transacao);
+			}
+		}
+		return resultado.toArray(new Transacao[0]);
 	}
 
 	@Override
